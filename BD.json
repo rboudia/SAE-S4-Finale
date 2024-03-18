@@ -1,0 +1,83 @@
+db.tournois.insertOne({
+  "_id": "1",
+  "nom": "Championnat National",
+  "Joueurs": ["1", "2"],
+  "date": {
+    "debut": "06/03/2024",
+    "fin": "06/03/2024"
+  },
+  "format": "Simple",
+  "categories": {
+    "age": "25-35",
+    "niveau": "Avancé"
+  },
+  "nombreTables": 10,
+  "lieu": {
+    "adresse": "140 rue de la nouvelle france",
+    "ville": "Montreuil",
+    "codePostal": "93100",
+    "pays": "France"
+  },
+  "status": "Prévu",
+})
+
+
+db.joueurs.insertMany([
+{
+  "_id": "1",
+  "nom": "boudia",
+  "prenom": "rayan",
+  "sexe": "homme",
+  "Categorie": {
+    "age": "27",
+    "niveau": "Intermédiaire"
+  }},
+{
+  "_id": "2",
+  "nom": "boudjemai",
+  "prenom": "ali-akbar",
+  "sexe": "homme",
+  "Categorie": {
+    "age": "26",
+    "niveau": "Intermédiaire"
+  }},
+{
+  "_id": "3",
+  "nom": "bdbouj",
+  "prenom": "aliray",
+  "sexe": "homme",
+  "Categorie": {
+    "age": "29",
+    "niveau": "Intermédiaire"
+  }}
+])
+
+
+db.matchs.insertOne({
+  "_id": "1",
+  "idTournoi": "1",
+  "phase": "Quart de finale",
+  "format": "Simple",
+  "joueurs": ["1", "2"],
+  "scores": "3-2",
+  "Heure": "14:00",
+  "table": "1",
+  "status": "En cours"
+})
+
+
+db.equipements.insertOne({
+  "_id": "1",
+  "table": {
+    "emplacement": "Table 1",
+    "statut": "Disponible"
+  }
+})
+
+db.equipes.insertOne({
+  "_id": "equipe1",
+  "nom": "Les Champions",
+  "joueurs": ["1", "3"]
+})
+
+

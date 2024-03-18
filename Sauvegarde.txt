@@ -1,0 +1,11 @@
+recu_age :
+
+age_min = input("Age min (Appuyer sur entrée pour sélectionner la valeur par défaut 1): ")
+age_max = input("Age max (Appuyer sur entrée pour sélectionner la valeur par défaut 100): ")
+
+if len(age_min) == 0:
+    age_min = 1
+
+if len(age_max) == 0:
+    age_max = 100
+
