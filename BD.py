@@ -39,9 +39,3 @@ class BD:
 
 tournoi = crea.creation_tournoi()
 
-base_donne = BD()
-# base_donne.affiche_tournoi()
-# base_donne.modif_tournoi("Test1", "Nouveau Test 1")
-# base_donne.affiche_tournoi()
-base_donne.insertion_tournoi(tournoi)
-# base_donne.suppresion_tournoi("Test")

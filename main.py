@@ -1,3 +1,20 @@
+from Client2Mongo import Client2Mongo
 from Tournoi import Tournoi
 
-a = Tournoi("Test", "12/03/2024", "Simple", ((0, 45), "Intermdiaire"))
+a = Tournoi("Tournoi 2", "12/05/2024", "Simple", ((10, 35), "Intermediaire"))
+bd = Client2Mongo("rayan")
+
+
+"""
+for tournoi in bd.find("tournois"):
+    print(tournoi)
+
+print()
+
+bd.insertion_tournoi(a)
+bd.suppresion_tournoi("Tournoi 2")
+bd.modif_tournoi("Test2", "Tournoi Test 2")
+
+for tournoi in bd.find("tournois"):
+    print(tournoi)
+"""
