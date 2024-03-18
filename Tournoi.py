@@ -3,7 +3,7 @@ import Client2Mongo
 
 class Tournoi:
     def __init__(self, nom: str, date: str, format: str, categorie: tuple):
-        # assert nom.isalnum(), "Le nom doit être alphanumérique"
+        assert isinstance(nom, str), "Le nom doit etre une chaine de caractère"
 
         assert isinstance(date, str), "La date est une chaine de caractère sous le format suivant : jj/mm/aaaa"
         jour, mois, annee = date.split("/")
