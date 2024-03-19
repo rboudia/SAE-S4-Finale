@@ -1,6 +1,3 @@
-import Client2Mongo
-
-
 class Tournoi:
     def __init__(self, nom: str, date: str, format: str, categorie: tuple):
         assert isinstance(nom, str), "Le nom doit etre une chaine de caractère"
@@ -34,4 +31,5 @@ class Tournoi:
         self.date = date
         self.format = format
         self.categorie = categorie
+
 
