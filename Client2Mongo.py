@@ -1,7 +1,4 @@
-from flask import Blueprint
 from pymongo import MongoClient
-
-collections_bp = Blueprint('collections', __name__)
 
 
 class Client2Mongo:
@@ -20,5 +17,3 @@ class Client2Mongo:
 
     def find(self, collection_name):
         return self.bd[collection_name].find()
-
-

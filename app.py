@@ -1,12 +1,9 @@
 from flask import Flask
-
+from flask_cors import CORS
 from tournoi_routes import tournois_bp
 
 app = Flask(__name__)
-
-@app.route('/')
-def hello_world():
-    return "Hello world"
+CORS(app, origins='http://localhost:4200')
 
 app.register_blueprint(tournois_bp, url_prefix='/tournois')
 

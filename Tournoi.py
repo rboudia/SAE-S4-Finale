@@ -31,5 +31,3 @@ class Tournoi:
         self.date = date
         self.format = format
         self.categorie = categorie
-
-

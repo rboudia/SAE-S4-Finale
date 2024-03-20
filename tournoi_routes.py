@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from Client2Mongo import Client2Mongo as Mongo
 from Tournoi import Tournoi
 
+
 tournois_bp = Blueprint('tournois', __name__)
 
 bd = Mongo("rayan")
@@ -21,10 +22,13 @@ def insertion_tournoi():
     age_max = tournoi.get("ageMax")
     niveau = tournoi.get("niveau")
 
+    # Creation d'un tournoi pour vérifier si les entrées sont bonnes
+    t = Tournoi(nom, date, format, ((age_min, age_max), niveau))
+
     dernier_id += 1
 
     doc = {"_id": str(dernier_id), "nom": nom, "date": {"debut": date, "fin": date}, "format": format,
-           "categorie": {"age": str(age_min) + "-" + str(age_max), "niveau": niveau}, "status": "Prevu"}
+           "categories": {"age": str(age_min) + "-" + str(age_max), "niveau": niveau}, "status": "Prevu"}
     collection.insert_one(doc)
 
     return "Tournoi inséré avec succès", 201
