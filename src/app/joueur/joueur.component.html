@@ -1,0 +1,11 @@
+<div>
+  <input type="text" [(ngModel)]="nomJoueur" placeholder="Entrez un nom de joueur">
+  <button (click)="rechercheJoueur()">Rechercher Joueur</button>
+  <div *ngIf="joueurInfo">
+    <h3>Informations du Joueur</h3>
+    <p>Nom: {{ joueurInfo.nom }}</p>
+    <p>Prénom: {{ joueurInfo.prenom }}</p>
+    <p>Age: {{ joueurInfo.Categorie.age }}</p>
+    <p>Niveau: {{ joueurInfo.Categorie.niveau }}</p>
+  </div>
+</div>

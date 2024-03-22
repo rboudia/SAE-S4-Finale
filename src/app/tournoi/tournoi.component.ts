@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
-import {TournoiService} from "./tournoi.service";
+import {TournoiService} from "../services/tournoi.service";
 import { HttpClient } from '@angular/common/http';
 
 @Component({

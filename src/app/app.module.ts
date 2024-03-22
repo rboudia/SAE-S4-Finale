@@ -4,7 +4,7 @@ import { RouterModule } from "@angular/router";
 import {routes} from "./app.routes";
 import {BrowserModule} from "@angular/platform-browser";
 import {TournoiComponent} from "./tournoi/tournoi.component";
-import {TournoiService} from "./tournoi/tournoi.service";
+import {TournoiService} from "./services/tournoi.service";
 
 
 
