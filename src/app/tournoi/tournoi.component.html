@@ -1,15 +1,17 @@
-<button type="button" class="btn btn-success" (click)="afficherTournois()">Afficher les Tournois</button>
+<div class="text-center">
+  <button type="button" class="btn btn-lg btn-success custom-btn" (click)="afficherTournois()">Afficher les Tournois</button>
+</div>
 
-<div *ngIf="showItems">
-  <ul>
-    <li *ngFor="let item of items">
-      Nom: {{ item.nom }}, <br>
-      Date de début: {{ item.date.debut }},<br>
-      Date de fin: {{ item.date.fin }},<br>
-      Catégorie d'âge: {{ item.categories.age }},<br>
-      Niveau: {{ item.categories.niveau }},<br>
-      Format: {{ item.format }},<br>
-      Statut: {{ item.status }}
+<div class="text-center" *ngIf="showItems">
+  <ul class="list-unstyled">
+    <li *ngFor="let item of items" class="custom-item">
+      <p>Nom: {{ item.nom }}</p>
+      <p>Date de début: {{ item.date.debut }}</p>
+      <p>Date de fin: {{ item.date.fin }}</p>
+      <p>Catégorie d'âge: {{ item.categories.age }}</p>
+      <p>Niveau: {{ item.categories.niveau }}</p>
+      <p>Format: {{ item.format }}</p>
+      <p>Statut: {{ item.status }}</p>
     </li>
   </ul>
 </div>
