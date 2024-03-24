@@ -1,36 +1,43 @@
-<header>
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-image: linear-gradient(to right, #ff8a00, #da1b60);">
-    <div class="container">
-      <a class="navbar-brand" href="#">MyTennisPlan</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav d-flex ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/tournois">Tournoi</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/joueurs">Joueurs</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="">Equipements</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="">Matchs</a>
-          </li>
-        </ul>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-image: linear-gradient(to right, #ff8a00, #da1b60);">
+      <div class="container">
+        <a class="navbar-brand" href="#">MyTennisPlan</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav d-flex ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/tournois">Tournoi</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/joueurs">Joueurs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">Equipements</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">Matchs</a>
+            </li>
+          </ul>
+        </div>
       </div>
+    </nav>
+  </header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+  <footer class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-image: linear-gradient(to right, #ff8a00, #da1b60);">
+    <div class="container">
+      <span class="navbar-brand mx-auto">SAE S4 BOUDIA Rayan - BOUDJEMAI Ali-Akbar</span>
     </div>
-  </nav>
-</header>
+  </footer>
 
-<footer class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom" style="background-image: linear-gradient(to right, #ff8a00, #da1b60);">
-  <div class="container">
-    <span class="navbar-brand mx-auto">SAE S4 BOUDIA Rayan - BOUDJEMAI Ali-Akbar</span>
-  </div>
-</footer>
+</body>
 
-<router-outlet></router-outlet>
+
 
 
