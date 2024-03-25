@@ -5,12 +5,10 @@ from Tournoi import Tournoi
 tournois_bp = Blueprint('tournois', __name__)
 
 bd = Mongo("rayan")
-dernier_id = 1
 
 
 @tournois_bp.route('/', methods=['POST'])
 def insertion_tournoi():
-    global dernier_id
     tournoi = request.json
     collection = bd.get_collection("tournois")
 
@@ -24,10 +22,16 @@ def insertion_tournoi():
     # Creation d'un tournoi pour vérifier si les entrées sont bonnes
     t = Tournoi(nom, date, format, ((age_min, age_max), niveau))
 
-    dernier_id += 1
+    f = open("id/tournois_id.txt", "r")
+    dernier_id = int(f.read()) + 1
+    f.close()
+
+    f = open("id/tournois_id.txt", "w")
+    f.write(str(dernier_id))
+    f.close()
 
     doc = {"_id": str(dernier_id), "nom": nom, "date": {"debut": date, "fin": date}, "format": format,
-           "categories": {"age": str(age_min) + "-" + str(age_max), "niveau": niveau}, "status": "Prevu"}
+           "categories": {"age": str(age_min) + "-" + str(age_max), "niveau": niveau}, "status": "Prévu"}
     collection.insert_one(doc)
 
     return "Tournoi inséré avec succès", 201

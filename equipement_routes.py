@@ -5,18 +5,21 @@ equipements_bp = Blueprint('equipements', __name__)
 
 bd = Client2Mongo("rayan")
 
-dernier_id = 3
-
 
 @equipements_bp.route('/', methods=['POST'])
-def insertion_tournoi():
-    global dernier_id
+def insertion_equipement():
     equipement = request.json
     collection = bd.get_collection("equipements")
 
     type = equipement.get("type").lower()
 
-    dernier_id += 1
+    f = open("id/equipements_id.txt", "r")
+    dernier_id = int(f.read()) + 1
+    f.close()
+
+    f = open("id/equipements_id.txt", "w")
+    f.write(str(dernier_id))
+    f.close()
 
     doc = {"_id": str(dernier_id), "type": type, "statut": "Disponible"}
     collection.insert_one(doc)
@@ -49,7 +52,7 @@ def suppresion_equipement(id):
     collection = bd.get_collection("equipements")
     equipement = collection.find_one({"_id": id})
     if equipement is None:
-        return f"Aucun tournoi n'a été trouvé avec cet id : {id}", 404
+        return f"Aucun equipement n'a été trouvé avec cet id : {id}", 404
     else:
         collection.delete_one({"_id": id})
         return "Suppression de l'équipement effectuée avec succès", 200
@@ -60,5 +63,21 @@ def affiche_nb_equip(type):
     collection = bd.get_collection("equipements")
     nb_equipements = collection.count_documents({"type": type})
 
-    return str(nb_equipements)
+    if nb_equipements == 0:
+        return f"Aucun equipement n'a été trouvé avec ce type : {type}", 404
+    else:
+        return str(nb_equipements)
 
+
+@equipements_bp.route('/type/<string:type>', methods=['GET'])
+def affiche_equipement_type(type):
+    collection = bd.get_collection("equipements")
+    equipement = collection.find_one({"type": type})
+
+    if not equipement:
+        return f"Aucun equipement n'a été trouvé avec ce type : {type}", 404
+    else:
+        equipements = []
+        for equipement in collection.find({"type": type}):
+            equipements.append(equipement)
+        return jsonify(equipements), 200

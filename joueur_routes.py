@@ -15,17 +15,53 @@ def nombre_de_joueur():
 @joueurs_bp.route('/', methods=['POST'])
 def inserer_joueur():
     joueur = request.json
-    collJoueur = bd.get_collection("joueurs")
-    insertion = collJoueur.insert_one(joueur)
-    return jsonify({"id": str(insertion.inserted_id)})
+    collection = bd.get_collection("joueurs")
+
+    nom = joueur.get("nom")
+    prenom = joueur.get("prenom")
+    age = joueur.get("age")
+    niveau = joueur.get("niveau")
+
+    f = open("id/joueurs_id.txt", "r")
+    dernier_id = int(f.read()) + 1
+    f.close()
+
+    f = open("id/joueurs_id.txt", "w")
+    f.write(str(dernier_id))
+    f.close()
+
+    doc = {"_id": str(dernier_id), "nom": nom, "prenom": prenom, "Categorie": {"age": str(age), "niveau": niveau}}
+    collection.insert_one(doc)
+
+    return "Joueur inséré avec succès", 201
 
 
 @joueurs_bp.route('/<string:nom>', methods=['GET'])
-def chercher_joueur(nom):
+def affiche_joueur(nom):
     collection = bd.get_collection("joueurs")
     joueur = collection.find_one({"nom": nom})
 
     if joueur is None:
-        return ("erreur")
+        return f"Aucun joueur n'a été trouvé avec ce nom : {nom}", 404
     else:
-        return jsonify(joueur)
+        return jsonify(joueur), 200
+
+
+@joueurs_bp.route('/', methods=['GET'])
+def affiche_joueurs():
+    collection = bd.get_collection("joueurs")
+    joueurs = []
+    for joueur in collection.find():
+        joueurs.append(joueur)
+    return jsonify(joueurs), 200
+
+
+@joueurs_bp.route('/<string:id>', methods=['DELETE'])
+def suppresion_joueur(id):
+    collection = bd.get_collection("joueurs")
+    joueur = collection.find_one({"_id": id})
+    if joueur is None:
+        return f"Aucun joueur n'a été trouvé avec cet id : {id}", 404
+    else:
+        collection.delete_one({"_id": id})
+        return "Suppression du joueur effectuée avec succès", 200

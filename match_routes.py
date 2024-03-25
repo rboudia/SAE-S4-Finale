@@ -25,3 +25,4 @@ def affiche_match(id):
         return f"Aucun match n'a été trouvé avec cet id : {id}", 404
     else:
         return jsonify(match), 200
+
