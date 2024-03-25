@@ -2,14 +2,13 @@ from flask import Blueprint, jsonify, request
 from Client2Mongo import Client2Mongo as Mongo
 from Tournoi import Tournoi
 
-
 tournois_bp = Blueprint('tournois', __name__)
 
 bd = Mongo("rayan")
 dernier_id = 1
 
 
-@tournois_bp.route('/insert/', methods=['POST'])
+@tournois_bp.route('/', methods=['POST'])
 def insertion_tournoi():
     global dernier_id
     tournoi = request.json
@@ -55,22 +54,23 @@ def affiche_tournois():
     return jsonify(tournois)
 
 
-@tournois_bp.route('/<string:nom_tournoi>', methods=['GET'])
-def affiche_tournoi(nom_tournoi):
+@tournois_bp.route('/<string:id>', methods=['GET'])
+def affiche_tournoi(id):
     collection = bd.get_collection("tournois")
-    tournoi = collection.find_one({"nom": nom_tournoi})
+    tournoi = collection.find_one({"_id": id})
 
-    if tournoi is None:
-        return "Aucun tournoi n'a été trouvé avec ce nom : ", nom_tournoi
+    if not tournoi:
+        return f"Aucun tournoi n'a été trouvé avec cet id : {id}", 404
     else:
-        return jsonify(tournoi)
+        return jsonify(tournoi), 200
 
 
-def suppresion_tournoi(nom_tournoi):
+@tournois_bp.route('/<string:id>', methods=['DELETE'])
+def suppresion_tournoi(id):
     collection = bd.get_collection("tournois")
-    tournoi = collection.find_one({"nom": nom_tournoi})
+    tournoi = collection.find_one({"_id": id})
     if tournoi is None:
-        print("Aucun tournoi n'a été trouvé avec ce nom : ", nom_tournoi)
+        return f"Aucun tournoi n'a été trouvé avec cet id : {id}", 404
     else:
-        print("Supression du tournoi : ", nom_tournoi)
-        collection.delete_one({"nom": nom_tournoi})
+        collection.delete_one({"_id": id})
+        return "Suppression du tournoi effectuée avec succès", 200
