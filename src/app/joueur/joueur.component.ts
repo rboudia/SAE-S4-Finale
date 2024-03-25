@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { JoueurService } from '../services/joueur.service';
+import {Component} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
+import {FormsModule} from '@angular/forms';
+import {JoueurService} from '../services/joueur.service';
 import {RouterOutlet} from "@angular/router";
 
 @Component({
@@ -22,7 +22,8 @@ export class JoueurComponent {
   age = '';
   niveau = '';
 
-  constructor(private joueurService: JoueurService) {}
+  constructor(private joueurService: JoueurService) {
+  }
 
   rechercheJoueur() {
     if (!this.nomJoueur) {
@@ -39,14 +40,14 @@ export class JoueurComponent {
       }
     );
   }
+
   inscrireJoueur() {
     const joueurData = {
       nom: this.nom,
       prenom: this.prenom,
-      Categorie: {
-        age: this.age,
-        niveau: this.niveau
-      }
+
+      age: this.age,
+      niveau: this.niveau
     };
     this.joueurService.ajouterJoueur(joueurData).subscribe(
       data => {
