@@ -22,11 +22,11 @@ def inserer_joueur():
     age = joueur.get("age")
     niveau = joueur.get("niveau")
 
-    f = open("id/joueurs_id.txt", "r")
+    f = open("../id/joueurs_id.txt", "r")
     dernier_id = int(f.read()) + 1
     f.close()
 
-    f = open("id/joueurs_id.txt", "w")
+    f = open("../id/joueurs_id.txt", "w")
     f.write(str(dernier_id))
     f.close()
 

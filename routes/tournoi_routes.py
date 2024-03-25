@@ -22,11 +22,11 @@ def insertion_tournoi():
     # Creation d'un tournoi pour vérifier si les entrées sont bonnes
     t = Tournoi(nom, date, format, ((age_min, age_max), niveau))
 
-    f = open("id/tournois_id.txt", "r")
+    f = open("../id/tournois_id.txt", "r")
     dernier_id = int(f.read()) + 1
     f.close()
 
-    f = open("id/tournois_id.txt", "w")
+    f = open("../id/tournois_id.txt", "w")
     f.write(str(dernier_id))
     f.close()
 
@@ -58,23 +58,62 @@ def affiche_tournois():
     return jsonify(tournois)
 
 
-@tournois_bp.route('/<string:id>', methods=['GET'])
-def affiche_tournoi(id):
+@tournois_bp.route('/<string:id_tournoi>', methods=['GET'])
+def affiche_tournoi(id_tournoi):
     collection = bd.get_collection("tournois")
-    tournoi = collection.find_one({"_id": id})
+    tournoi = collection.find_one({"_id": id_tournoi})
 
     if not tournoi:
-        return f"Aucun tournoi n'a été trouvé avec cet id : {id}", 404
+        return f"Aucun tournoi n'a été trouvé avec cet id : {id_tournoi}", 404
     else:
         return jsonify(tournoi), 200
 
 
-@tournois_bp.route('/<string:id>', methods=['DELETE'])
-def suppresion_tournoi(id):
+@tournois_bp.route('/<string:id_tournoi>', methods=['DELETE'])
+def suppresion_tournoi(id_tournoi):
     collection = bd.get_collection("tournois")
-    tournoi = collection.find_one({"_id": id})
+    tournoi = collection.find_one({"_id": id_tournoi})
     if tournoi is None:
-        return f"Aucun tournoi n'a été trouvé avec cet id : {id}", 404
+        return f"Aucun tournoi n'a été trouvé avec cet id : {id_tournoi}", 404
     else:
-        collection.delete_one({"_id": id})
+        collection.delete_one({"_id": id_tournoi})
         return "Suppression du tournoi effectuée avec succès", 200
+
+
+@tournois_bp.route('/ajout_joueurs/<string:id_tournoi>/<string:id_joueur>')
+def ajout_joueur(id_tournoi, id_joueur):
+    collection_joueur = bd.get_collection("joueurs")
+    collection_tournoi = bd.get_collection("tournois")
+
+    tournoi = collection_tournoi.find_one({"_id": id_tournoi})
+    joueur = collection_joueur.find_one({"_id": id_joueur})
+
+    if not tournoi and not joueur:
+        return "Le tournoi ou le joueur n'existe pas", 404
+    else:
+
+        joueurs_actuels = tournoi.get("Joueurs", [])
+
+        if id_joueur not in joueurs_actuels:
+            joueurs_actuels.append(id_joueur)
+
+            filtre = {"_id": id_tournoi}
+            nouvelles_valeurs = {"$set": {"Joueurs": joueurs_actuels}}
+            collection_tournoi.update_one(filtre, nouvelles_valeurs)
+            return "Modification effectuée", 200
+        else:
+            return "Le joueur est déjà inscrit dans ce tournoi", 400
+
+
+@tournois_bp.route('/nb_inscrit/<string:id_tournoi>')
+def affiche_nb_inscrit(id_tournoi):
+    collection = bd.get_collection("tournois")
+    tournoi = collection.find_one({"_id": id_tournoi})
+
+    if not tournoi:
+        return "Le tournoi n'existe pas", 404
+    else:
+        joueurs_inscrits = tournoi.get("Joueurs", [])
+        nb_inscrits = len(joueurs_inscrits)
+
+        return str(nb_inscrits), 200
