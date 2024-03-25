@@ -72,7 +72,8 @@ footer.navbar .navbar-brand {
 
 .inner-content {
   position: relative;
-  height: 72vh;
+  min-height: 72vh;
+  overflow: auto;
 }
 
 .text-container {
@@ -97,9 +98,47 @@ footer.navbar .navbar-brand {
   left: 50%;
   transform: translateX(-50%);
   width: 85%;
-  height: 75%;
+  height: 85%;
   border-radius: 20px;
 }
+
+.inscription-container,
+.search-container {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+}
+
+.inscription-container h2,
+.search-container h2 {
+  text-align: center;
+}
+
+form input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+form button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #ff8a00;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #da1b60;
+}
+
 
 
 

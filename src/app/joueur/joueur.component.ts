@@ -17,6 +17,10 @@ export class JoueurComponent {
   showItems2 = false;
   nomJoueur = '';
   joueurInfo: any = null;
+  nom = '';
+  prenom = '';
+  age = '';
+  niveau = '';
 
   constructor(private joueurService: JoueurService) {}
 
@@ -32,6 +36,24 @@ export class JoueurComponent {
       },
       erreur => {
         console.error('Erreur!', erreur);
+      }
+    );
+  }
+  inscrireJoueur() {
+    const joueurData = {
+      nom: this.nom,
+      prenom: this.prenom,
+      Categorie: {
+        age: this.age,
+        niveau: this.niveau
+      }
+    };
+    this.joueurService.ajouterJoueur(joueurData).subscribe(
+      data => {
+        console.log('Joueur inscrit avec succès', data);
+      },
+      erreur => {
+        console.error('Erreur lors de l\'inscription du joueur', erreur);
       }
     );
   }

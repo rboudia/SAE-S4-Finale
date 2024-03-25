@@ -1,11 +1,30 @@
-<div>
-  <input type="text" [(ngModel)]="nomJoueur" placeholder="Entrez un nom de joueur">
-  <button (click)="rechercheJoueur()">Rechercher Joueur</button>
-  <div *ngIf="joueurInfo">
-    <h3>Informations du Joueur</h3>
-    <p>Nom: {{ joueurInfo.nom }}</p>
-    <p>Prénom: {{ joueurInfo.prenom }}</p>
-    <p>Age: {{ joueurInfo.Categorie.age }}</p>
-    <p>Niveau: {{ joueurInfo.Categorie.niveau }}</p>
+<div class="content-area">
+  <div class="inner-content">
+    <div class="inscription-container">
+      <h2>Inscription Joueur</h2>
+      <form (ngSubmit)="inscrireJoueur()">
+        <input type="text" [(ngModel)]="nom" name="nom" placeholder="Nom" />
+        <input type="text" [(ngModel)]="prenom" name="prenom" placeholder="Prénom" />
+        <input type="text" [(ngModel)]="age" name="age" placeholder="Age" />
+        <input type="text" [(ngModel)]="niveau" name="niveau" placeholder="Niveau" />
+        <button (ngSubmit)="inscrireJoueur()">S'inscrire</button>
+      </form>
+    </div>
+
+
+    <div class="search-container">
+      <h2>Chercher Joueur</h2>
+      <form>
+        <input type="text" [(ngModel)]="nomJoueur" name="nomJoueur" placeholder="Entrez un nom de joueur">
+        <button (click)="rechercheJoueur()">Rechercher Joueur</button>
+      </form>
+      <br>
+      <div *ngIf="joueurInfo">
+        <p>Nom: {{ joueurInfo.nom }}</p>
+        <p>Prénom: {{ joueurInfo.prenom }}</p>
+        <p>Age: {{ joueurInfo.Categorie.age }}</p>
+        <p>Niveau: {{ joueurInfo.Categorie.niveau }}</p>
+      </div>
+    </div>
   </div>
 </div>
