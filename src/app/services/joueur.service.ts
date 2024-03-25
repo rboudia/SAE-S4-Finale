@@ -16,11 +16,11 @@ export class JoueurService {
       })
     };
 
-    return this.http.post('http://127.0.0.1:5000/api/joueurs', joueurData, httpOptions);
+    return this.http.post('/api/joueurs', joueurData, httpOptions);
   }
 
   rechercheJoueur(nomJoueur: string): Observable<any> {
-    return this.http.get(`http://127.0.0.1:5000/api/joueurs/${nomJoueur}`);
+    return this.http.get(`/api/joueurs/${nomJoueur}`);
   }
 
 }
