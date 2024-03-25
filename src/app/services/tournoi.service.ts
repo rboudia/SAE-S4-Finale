@@ -10,6 +10,6 @@ export class TournoiService {
   }
 
   getTournois() {
-    return this.http.get("http://127.0.0.1:5000/tournois")
+    return this.http.get("/api/tournois")
   }
 }
