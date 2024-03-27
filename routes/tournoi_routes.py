@@ -1,4 +1,82 @@
+from flask import Blueprint, jsonify, request
+from Client2Mongo import Client2Mongo as Mongo
+from Tournoi import Tournoi
 
+tournois_bp = Blueprint('tournois', __name__)
+
+bd = Mongo("rayan")from flask import Blueprint, jsonify, request
+from Client2Mongo import Client2Mongo as Mongo
+from Tournoi import Tournoi
+
+tournois_bp = Blueprint('tournois', __name__)
+
+bd = Mongo("rayan")
+
+
+@tournois_bp.route('/', methods=['POST'])
+def insertion_tournoi():
+    tournoi = request.json
+    collection = bd.get_collection("tournois")
+
+    nom = tournoi.get("nom")
+    date = tournoi.get("date")
+    format = tournoi.get("format")
+    age_min = tournoi.get("ageMin")
+    age_max = tournoi.get("ageMax")
+    niveau = tournoi.get("niveau")
+
+    # Creation d'un tournoi pour vérifier si les entrées sont bonnes
+    t = Tournoi(nom, date, format, ((age_min, age_max), niveau))
+
+    f = open("../id/tournois_id.txt", "r")
+    dernier_id = int(f.read()) + 1
+    f.close()from flask import Blueprint, jsonify, request
+from Client2Mongo import Client2Mongo as Mongo
+from Tournoi import Tournoi
+
+tournois_bp = Blueprint('tournois', __name__)
+
+bd = Mongo("rayan")
+
+
+@tournois_bp.route('/', methods=['POST'])
+def insertion_tournoi():
+    tournoi = request.json
+    collection = bd.get_collection("tournois")
+
+    nom = tournoi.get("nom")
+    date = tournoi.get("date")
+    format = tournoi.get("format")
+    age_min = tournoi.get("ageMin")
+    age_max = tournoi.get("ageMax")
+    niveau = tournoi.get("niveau")
+
+    # Creation d'un tournoi pour vérifier si les entrées sont bonnes
+    t = Tournoi(nom, date, format, ((age_min, age_max), niveau))
+
+    f = open("../id/tournois_id.txt", "r")
+    dernier_id = int(f.read()) + 1
+    f.close()
+
+
+@tournois_bp.route('/', methods=['POST'])
+def insertion_tournoi():
+    tournoi = request.json
+    collection = bd.get_collection("tournois")
+
+    nom = tournoi.get("nom")
+    date = tournoi.get("date")
+    format = tournoi.get("format")
+    age_min = tournoi.get("ageMin")
+    age_max = tournoi.get("ageMax")
+    niveau = tournoi.get("niveau")
+
+    # Creation d'un tournoi pour vérifier si les entrées sont bonnes
+    t = Tournoi(nom, date, format, ((age_min, age_max), niveau))
+
+    f = open("../id/tournois_id.txt", "r")
+    dernier_id = int(f.read()) + 1
+    f.close()
 
     f = open("../id/tournois_id.txt", "w")
     f.write(str(dernier_id))
