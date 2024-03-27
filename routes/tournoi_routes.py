@@ -22,11 +22,11 @@ def insertion_tournoi():
     # Creation d'un tournoi pour vérifier si les entrées sont bonnes
     t = Tournoi(nom, date, format, ((age_min, age_max), niveau))
 
-    f = open("../id/tournois_id.txt", "r")
+    f = open("id/tournois_id.txt", "r")
     dernier_id = int(f.read()) + 1
     f.close()
 
-    f = open("../id/tournois_id.txt", "w")
+    f = open("id/tournois_id.txt", "w")
     f.write(str(dernier_id))
     f.close()
 
