@@ -52,5 +52,17 @@ export class ModifTournoiComponent implements OnInit {
       }
     );
   }
+  supprimerTournoi(): void {
+    const idTournoi = this.tournoi._id;
+    this.tournoiService.supprimerTournoi(idTournoi).subscribe(
+      (response: any) => {
+        console.log(response); // Afficher la réponse du serveur après la suppression
+        // Ajoutez ici toute logique supplémentaire après la suppression du tournoi
+      },
+      error => {
+        console.error('Erreur lors de la suppression du tournoi:', error);
+      }
+    );
+  }
 }
 

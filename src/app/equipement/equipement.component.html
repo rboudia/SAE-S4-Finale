@@ -1,0 +1,28 @@
+<div class="central-container">
+  <div class="equipement-container">
+    <div class="text-center">
+      <h3>Liste des équipements</h3>
+    </div>
+    <ul class="list-unstyled">
+      <li *ngFor="let equipement of equipements" class="custom-item">
+        <p>Type: {{ equipement.type }}</p>
+        <p>Statut: {{ equipement.statut }}</p>
+        <p>IdTournoi: {{ equipement.idTournoi }}</p>
+        <button (click)="supprimerEquipement(equipement._id)" class="btn btn-danger">Supprimer</button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="formulaire-container">
+    <div class="text-center">
+      <h3>Ajouter un équipement</h3>
+      <form (submit)="insererEquipement()">
+        <div class="form-group">
+          <label for="type">Type:</label>
+          <input type="text" class="form-control" id="type" name="type" [(ngModel)]="type" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Ajouter</button>
+      </form>
+    </div>
+  </div>
+</div>
