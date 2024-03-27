@@ -13,11 +13,11 @@ def insertion_equipement():
 
     type = equipement.get("type").lower()
 
-    f = open("../id/equipements_id.txt", "r")
+    f = open("id/equipements_id.txt", "r")
     dernier_id = int(f.read()) + 1
     f.close()
 
-    f = open("../id/equipements_id.txt", "w")
+    f = open("id/equipements_id.txt", "w")
     f.write(str(dernier_id))
     f.close()
 
