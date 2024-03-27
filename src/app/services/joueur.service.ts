@@ -21,9 +21,11 @@ export class JoueurService {
 
     return this.http.post('/api/joueurs', joueurData, httpOptions);
   }
-
   rechercheJoueur(nomJoueur: string): Observable<any> {
     return this.http.get(`/api/joueurs/${nomJoueur}`);
+  }
+  afficherJoueur(): Observable<any> {
+    return this.http.get('/api/joueurs/');
   }
 
 }

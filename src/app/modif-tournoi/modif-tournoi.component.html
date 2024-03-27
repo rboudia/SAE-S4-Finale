@@ -1,0 +1,36 @@
+<div class="central-containerT">
+  <div class="tournois-container">
+    <div class="text-center">
+      <ul class="list-unstyled">
+        <li *ngIf="tournoi" class="custom-item">
+          <p>Nom: {{ tournoi.nom }}</p>
+          <p>Date de début: {{ tournoi.date.debut }}</p>
+          <p>Date de fin: {{ tournoi.date.fin }}</p>
+          <p *ngFor="let joueurId of tournoi.Joueurs">Joueur : {{ joueurId }} </p>
+          <p>Catégorie d'âge: {{ tournoi.categories.age }}</p>
+          <p>Niveau: {{ tournoi.categories.niveau }}</p>
+          <p>Format: {{ tournoi.format }}</p>
+          <p>Statut: {{ tournoi.status }}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ajouter-container">
+    <div class="text-center">
+      <h3>Liste des joueurs</h3>
+      <div class="joueur-list">
+        <ul *ngIf="joueurs" class="list-unstyled">
+          <li *ngFor="let joueur of joueurs" class="joueur-item">
+            {{ joueur.nom }} {{ joueur.prenom }}
+            <button (click)="inscrireJoueur(joueur._id)">Inscrire</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

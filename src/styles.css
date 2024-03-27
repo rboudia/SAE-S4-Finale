@@ -139,6 +139,106 @@ form button:hover {
   background-color: #da1b60;
 }
 
+.central-container {
+  background-image: linear-gradient(to right, #ff8a00, #da1b60);
+  border-radius: 20px;
+  margin-top: 1%;
+  margin-left: 15%;
+  margin-right: 15%;
+  margin-bottom: 2%;
+  display: flex;
+}
+
+.tournois-container,
+.ajouter-container,
+.formulaire-container {
+  flex: 1;
+  padding: 20px;
+}
+
+
+.tournois-container {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.btn {
+  margin-top: 3%;
+  border-radius: 20px;
+  font-size: 1.5rem;
+  padding: 10px 30px;
+}
+
+.custom-item {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.list-unstyled {
+  list-style: none;
+  padding: 0;
+}
+
+.custom-item3 {
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 20px);
+  margin-right: 20px;
+}
+
+.formulaire-container {
+  margin-top: 2%;
+  margin-right: 2%;
+  margin-bottom: 2%;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+}
+
+.ajouter {
+  margin-top: 50%;
+  margin-right: 2%;
+  margin-bottom: 50%;
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+}
+.central-containerT {
+  background-image: linear-gradient(to right, #ff8a00, #da1b60);
+  border-radius: 20px;
+  margin-top: 4%;
+  margin-left: 15%;
+  margin-right: 15%;
+  margin-bottom: 4%;
+  display: flex;
+}
+
+/* Ajoutez ce style dans votre fichier CSS global ou local */
+
+.joueur-list {
+  background-color: #f2f2f2;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.joueur-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.joueur-item:hover {
+  background-color: #f0f0f0;
+}
 
 
 

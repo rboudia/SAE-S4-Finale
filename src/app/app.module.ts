@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from "@angular/router";
 import {routes} from "./app.routes";
 import {BrowserModule} from "@angular/platform-browser";
-import {TournoiComponent} from "./tournoi/tournoi.component";
 import {TournoiService} from "./services/tournoi.service";
+
+
 
 
 

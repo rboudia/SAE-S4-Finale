@@ -1,23 +1,31 @@
-import {Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
-import {TournoiService} from "../services/tournoi.service";
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { TournoiService } from "../services/tournoi.service";
 import { HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-tournoi',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, FormsModule, RouterLink],
   providers: [TournoiService],
   templateUrl: './tournoi.component.html',
 })
 export class TournoiComponent {
-
   items: any;
   showItems = false;
 
+  nom: string = '';
+  date: string = '';
+  format: string = '';
+  ageMin: number = 0;
+  ageMax: number = 0;
+  niveau: string = '';
 
-  constructor(private http: HttpClient, private serviceTournoi: TournoiService) {
+  constructor(private http: HttpClient, private serviceTournoi: TournoiService, private router: Router) {
     this.getItems();
   }
 
@@ -32,8 +40,33 @@ export class TournoiComponent {
     );
   }
 
+  afficherDetailTournoi(id: string) {
+    this.router.navigate(['/modifier-tournoi', id]);
+  }
+
   afficherTournois() {
     this.showItems = !this.showItems;
   }
 
+  envoieForm() {
+    const tournoiData = {
+      nom: this.nom,
+      date: this.date,
+      format: this.format,
+      ageMin: this.ageMin,
+      ageMax: this.ageMax,
+      niveau: this.niveau
+    };
+
+    this.serviceTournoi.insererTournoi(tournoiData).subscribe(
+      response => {
+        console.log('Tournoi inséré avec succès:', response);
+        // Gérer la réponse ici, par exemple afficher un message de succès à l'utilisateur
+      },
+      error => {
+        console.error('Erreur lors de l\'insertion du tournoi:', error);
+        // Gérer les erreurs ici, par exemple afficher un message d'erreur à l'utilisateur
+      }
+    );
+  }
 }

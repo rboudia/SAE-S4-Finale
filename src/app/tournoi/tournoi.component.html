@@ -1,20 +1,60 @@
-<div class="text-center">
-  <button type="button" class="btn btn-lg btn-success custom-btn" (click)="afficherTournois()">Afficher les Tournois</button>
+<div class="central-container">
+  <div class="tournois-container">
+    <div class="text-center">
+      <button type="button" class="btn btn-lg btn-success custom-btn" (click)="afficherTournois()">Afficher les Tournois</button>
+    </div>
+
+    <div class="text-center" *ngIf="showItems">
+      <ul class="list-unstyled">
+        <li *ngFor="let item of items" class="custom-item">
+          <a [routerLink]="['/modifier-tournoi', item._id]">
+          <p>Nom: {{ item.nom }}</p>
+          </a>
+          <p>Date de début: {{ item.date.debut }}</p>
+          <p>Date de fin: {{ item.date.fin }}</p>
+          <p *ngFor="let joueurId of item.Joueurs">Joueur : {{ joueurId }} </p>
+          <p>Catégorie d'âge: {{ item.categories.age }}</p>
+          <p>Niveau: {{ item.categories.niveau }}</p>
+          <p>Format: {{ item.format }}</p>
+          <p>Statut: {{ item.status }}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="formulaire-container">
+    <div class="text-center">
+      <h3>Créer un tournoi</h3>
+      <form (ngSubmit)="envoieForm()" #tournoiForm="ngForm">
+        <div class="form-group">
+          <label for="nom">Nom:</label>
+          <input type="text" class="form-control" id="nom" name="nom" [(ngModel)]="nom" required>
+        </div>
+        <div class="form-group">
+          <label for="date">Date:</label>
+          <input type="text" class="form-control" id="date" name="date" [(ngModel)]="date" required>
+        </div>
+        <div class="form-group">
+          <label for="format">Format:</label>
+          <input type="text" class="form-control" id="format" name="format" [(ngModel)]="format" required>
+        </div>
+        <div class="form-group">
+          <label for="ageMin">Age Minimum:</label>
+          <input type="number" class="form-control" id="ageMin" name="ageMin" [(ngModel)]="ageMin" required>
+        </div>
+        <div class="form-group">
+          <label for="ageMax">Age Maximum:</label>
+          <input type="number" class="form-control" id="ageMax" name="ageMax" [(ngModel)]="ageMax" required>
+        </div>
+        <div class="form-group">
+          <label for="niveau">Niveau:</label>
+          <input type="text" class="form-control" id="niveau" name="niveau" [(ngModel)]="niveau" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Soumettre</button>
+      </form>
+    </div>
+  </div>
 </div>
 
-<div class="text-center" *ngIf="showItems">
-  <ul class="list-unstyled">
-    <li *ngFor="let item of items" class="custom-item">
-      <p>Nom: {{ item.nom }}</p>
-      <p>Date de début: {{ item.date.debut }}</p>
-      <p>Date de fin: {{ item.date.fin }}</p>
-      <p *ngFor="let joueurId of item.Joueurs">Joueur : {{ joueurId }} </p>
-      <p>Catégorie d'âge: {{ item.categories.age }}</p>
-      <p>Niveau: {{ item.categories.niveau }}</p>
-      <p>Format: {{ item.format }}</p>
-      <p>Statut: {{ item.status }}</p>
-    </li>
-  </ul>
-</div>
 
 
