@@ -116,9 +116,9 @@ def ajout_joueur(id_tournoi, id_joueur):
                 collection_tournoi.update_one(filtre, nouvelles_valeurs)
                 return "Le joueur a bien été inscrit", 200
             else:
-                return "Le joueur ne correspond pas aux critères d'âge ou de niveau du tournoi", 400
+                return "Le joueur ne correspond pas aux critères d'âge ou de niveau du tournoi", 450
         else:
-            return "Le joueur est déjà inscrit dans ce tournoi", 400
+            return "Le joueur est déjà inscrit dans ce tournoi", 455
 
 
 @tournois_bp.route('/nb_inscrit/<string:id_tournoi>', methods=['GET'])
@@ -138,7 +138,6 @@ def affiche_nb_inscrit(id_tournoi):
 @tournois_bp.route('/creer_match/<string:id_tournoi>', methods=['PATCH'])
 def creation_match_tournois(id_tournoi):
     collection_tournoi = bd.get_collection("tournois")
-    collection_joueur = bd.get_collection("joueurs")
     collection_match = bd.get_collection("matchs")
     collection_equipement = bd.get_collection("equipements")
 
