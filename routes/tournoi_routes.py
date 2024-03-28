@@ -40,16 +40,24 @@ def insertion_tournoi():
     return "Tournoi inséré avec succès", 201
 
 
-def modif_tournoi(old_nom_tourn: str, new_nom_tourn: str):
+@tournois_bp.route('/modif/<string:id_tournoi>/<string:nom_champ>/<string:ancienne_valeur>/<string:nouvelle_valeur>', methods=['PATCH'])
+def modif_tournoi(id_tournoi, nom_champ, ancienne_valeur, nouvelle_valeur):
     collection = bd.get_collection("tournois")
-    tournoi = collection.find_one({"nom": old_nom_tourn})
+    tournoi = collection.find_one({"_id": id_tournoi})
 
-    if tournoi is None:
-        print("Aucun tournoi n'a été trouvé avec ce nom : ", old_nom_tourn)
+    if not tournoi:
+        return f"Aucun tournoi n'a été trouvé avec cet id : {id_tournoi}", 404
     else:
-        filtre = {"nom": old_nom_tourn}
-        nouvelles_valeurs = {"$set": {"nom": new_nom_tourn}}
-        collection.update_one(filtre, nouvelles_valeurs)
+        tournoi = collection.find_one({"_id": id_tournoi, nom_champ: ancienne_valeur})
+
+        if not tournoi:
+            return f"Aucun valeur a été trouvé pour le champ {nom_champ}", 404
+        else:
+            filtre = {nom_champ: ancienne_valeur}
+            nouvelles_valeurs = {"$set": {nom_champ: nouvelle_valeur}}
+            collection.update_one(filtre, nouvelles_valeurs)
+
+            return "Modif avec succès", 200
 
 
 @tournois_bp.route('/', methods=['GET'])
