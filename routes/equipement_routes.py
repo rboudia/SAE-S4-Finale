@@ -82,3 +82,17 @@ def affiche_equipement_type(type):
         for equipement in collection.find({"type": type}):
             equipements.append(equipement)
         return jsonify(equipements), 200
+
+
+
+def modif_statut_en_fonction_tournoi(id_tournoi):
+    collection = bd.get_collection("equipements")
+    equipement = collection.find_one({"idTournoi": id_tournoi})
+
+    if not equipement:
+        return f"Aucun equipement n'a été trouvé avec comme idTournoi : {id_tournoi}"
+    else:
+        collection.update_many({"statut": "Occupé", "idTournoi": id_tournoi}, {"$set": {"statut": "Disponible",
+                                                                                        "idTournoi": "Aucun"}})
+        return "Modification du statut effectuée"
+

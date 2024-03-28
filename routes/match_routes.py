@@ -40,3 +40,13 @@ def affiche_match_tournoi(nom_tournoi):
             matchs_tournoi.append(match)
 
         return jsonify(matchs_tournoi), 200
+
+
+def suppresion_matchs_tournois(nom_tournoi):
+    collection = bd.get_collection("matchs")
+    match = collection.find_one({"nomTournoi": nom_tournoi})
+    if not match:
+        return f"Aucun match n'est en cours pour le tournoi : {nom_tournoi}"
+    else:
+        collection.delete_many({"nomTournoi": nom_tournoi})
+        return "La suppression a été effectuée", 200
