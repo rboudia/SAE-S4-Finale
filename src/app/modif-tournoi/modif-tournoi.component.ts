@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TournoiService } from '../services/tournoi.service';
 import { JoueurService } from '../services/joueur.service';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,7 @@ export class ModifTournoiComponent implements OnInit {
   tournoi: any;
   joueurs: any[] | undefined;
 
-  constructor(private route: ActivatedRoute, private tournoiService: TournoiService, private joueurService: JoueurService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private tournoiService: TournoiService, private joueurService: JoueurService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -41,11 +41,11 @@ export class ModifTournoiComponent implements OnInit {
     );
   }
   inscrireJoueur(idJoueur: string): void {
-    const idTournoi = this.tournoi._id; // Récupérer l'ID du tournoi actuel
+    const idTournoi = this.tournoi._id;
     this.tournoiService.inscrireJoueurAuTournoi(idTournoi, idJoueur).subscribe(
       (response: any) => {
-        console.log(response); // Afficher la réponse du serveur après l'inscription
-        // Ajoutez ici toute logique supplémentaire après l'inscription du joueur
+        console.log(response);
+        this.router.navigate([`/modifier-tournoi/${idTournoi}`]);
       },
       error => {
         console.error('Erreur lors de l\'inscription du joueur au tournoi:', error);
@@ -56,8 +56,7 @@ export class ModifTournoiComponent implements OnInit {
     const idTournoi = this.tournoi._id;
     this.tournoiService.supprimerTournoi(idTournoi).subscribe(
       (response: any) => {
-        console.log(response); // Afficher la réponse du serveur après la suppression
-        // Ajoutez ici toute logique supplémentaire après la suppression du tournoi
+        console.log(response);
       },
       error => {
         console.error('Erreur lors de la suppression du tournoi:', error);

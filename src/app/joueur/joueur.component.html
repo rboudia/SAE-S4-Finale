@@ -6,7 +6,14 @@
         <input type="text" [(ngModel)]="nom" name="nom" placeholder="Nom" />
         <input type="text" [(ngModel)]="prenom" name="prenom" placeholder="Prénom" />
         <input type="text" [(ngModel)]="age" name="age" placeholder="Age" />
-        <input type="text" [(ngModel)]="niveau" name="niveau" placeholder="Niveau" />
+        <div class="form-group">
+          <select class="form-control" id="niveau" name="niveau" [(ngModel)]="niveau" required>
+            <option value="" disabled selected hidden>Niveau</option> <!-- Placeholder -->
+            <option value="Amateur">Amateur</option>
+            <option value="Intermédiaire">Intermédiaire</option>
+            <option value="Professionnel">Professionnel</option>
+          </select>
+        </div>
         <button (ngSubmit)="inscrireJoueur()">S'inscrire</button>
       </form>
     </div>

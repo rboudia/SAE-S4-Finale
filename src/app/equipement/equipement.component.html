@@ -8,7 +8,9 @@
         <p>Type: {{ equipement.type }}</p>
         <p>Statut: {{ equipement.statut }}</p>
         <p>IdTournoi: {{ equipement.idTournoi }}</p>
+        <a href="/equipement">
         <button (click)="supprimerEquipement(equipement._id)" class="btn btn-danger">Supprimer</button>
+        </a>
       </li>
     </ul>
   </div>
