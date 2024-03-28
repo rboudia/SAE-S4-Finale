@@ -6,23 +6,24 @@ equipements_bp = Blueprint('equipements', __name__)
 bd = Client2Mongo("rayan")
 
 
-@equipements_bp.route('/', methods=['POST'])
-def insertion_equipement():
+@equipements_bp.route('/<string:nb_equip>', methods=['POST'])
+def insertion_equipement(nb_equip):
     equipement = request.json
     collection = bd.get_collection("equipements")
 
     type = equipement.get("type").lower()
+    for i in range(int(nb_equip)):
 
-    f = open("id/equipements_id.txt", "r")
-    dernier_id = int(f.read()) + 1
-    f.close()
+        f = open("id/equipements_id.txt", "r")
+        dernier_id = int(f.read()) + 1
+        f.close()
 
-    f = open("id/equipements_id.txt", "w")
-    f.write(str(dernier_id))
-    f.close()
+        f = open("id/equipements_id.txt", "w")
+        f.write(str(dernier_id))
+        f.close()
 
-    doc = {"_id": str(dernier_id), "type": type, "statut": "Disponible", "idTournoi": "Aucun"}
-    collection.insert_one(doc)
+        doc = {"_id": str(dernier_id), "type": type, "statut": "Disponible", "idTournoi": "Aucun"}
+        collection.insert_one(doc)
 
     return "Equipement inséré avec succès", 201
 
@@ -64,7 +65,7 @@ def affiche_nb_equip(type):
     nb_equipements = collection.count_documents({"type": type, "statut": "Disponible"})
 
     if nb_equipements == 0:
-        return f"Aucun equipement n'a été trouvé avec ce type : {type}", 404
+        return f"Aucun equipement disponible n'a été trouvé avec ce type : {type}", 404
     else:
         return str(nb_equipements)
 
