@@ -33,10 +33,17 @@ export class TournoiService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        // Vous pouvez ajouter des en-têtes d'autorisation ou d'autres en-têtes si nécessaire
       })
     };
-
     return this.http.delete(`/api/tournois/${idTournoi}`, httpOptions);
+  }
+
+  creerMatch(idTournoi: string): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    };
+    return this.http.patch(`/api/tournois/creer_match/${idTournoi}`, httpOptions);
   }
 }

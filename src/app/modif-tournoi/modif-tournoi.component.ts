@@ -63,5 +63,17 @@ export class ModifTournoiComponent implements OnInit {
       }
     );
   }
+
+  creerMatch(): void {
+    const idTournoi = this.tournoi._id;
+    this.tournoiService.creerMatch(idTournoi).subscribe(
+      (response: any) => {
+        console.log(response);
+      },
+      error => {
+        console.error('Erreur lors de la creation de match:', error);
+      }
+    );
+  }
 }
 

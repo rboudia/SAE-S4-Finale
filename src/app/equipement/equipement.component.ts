@@ -14,7 +14,7 @@ import { EquipementService } from '../services/equipement.service';
 export class EquipementComponent implements OnInit {
   equipements: any[] = [];
   type: string = '';
-
+  nombre: string = '';
 
   constructor(private equipementService: EquipementService) {}
 
@@ -32,28 +32,30 @@ export class EquipementComponent implements OnInit {
       }
     );
   }
+
   insererEquipement(): void {
-    if (this.type.trim() === '') {
-      // Gérer le cas où le champ est vide, par exemple afficher un message d'erreur
+    if (this.type.trim() === '' || this.nombre.trim() === '') {
       return;
     }
-    this.equipementService.insererEquipement(this.type.trim()).subscribe(
+    this.equipementService.insererEquipement(this.type.trim(), this.nombre.trim()).subscribe(
       () => {
-        // Gérer la réussite de l'insertion, par exemple afficher un message de succès
         console.log('Equipement inséré avec succès');
-        this.type = ''; // Effacer le champ de saisie après l'insertion
+        this.type = '';
+        this.nombre = '';
       },
       (error) => {
-        // Gérer les erreurs, par exemple afficher un message d'erreur
         console.error('Erreur lors de l\'insertion de l\'équipement :', error);
       }
     );
   }
+
+
+
   supprimerEquipement(id: string): void {
     this.equipementService.supprimerEquipement(id).subscribe(
       () => {
         console.log('Equipement supprimé avec succès');
-        this.afficherEquipements(); // Actualiser la liste après la suppression
+        this.afficherEquipements();
       },
       (error) => {
         console.error('Erreur lors de la suppression de l\'équipement :', error);

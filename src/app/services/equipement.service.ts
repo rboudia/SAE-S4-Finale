@@ -12,9 +12,12 @@ export class EquipementService {
   afficherEquipements(): Observable<any> {
     return this.http.get('/api/equipements/');
   }
-  insererEquipement(type: string) {
-    return this.http.post('/api/equipements/', { type });
+
+  insererEquipement(type: string, nombre: string): Observable<any> {
+    const equipement = { type };
+    return this.http.post(`/api/equipements/${nombre}`, equipement);
   }
+
   supprimerEquipement(id: string): Observable<any> {
     return this.http.delete(`/api/equipements/${id}`);
   }

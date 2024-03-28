@@ -16,7 +16,7 @@ import { RouterLink } from '@angular/router';
 })
 export class TournoiComponent {
   items: any;
-  showItems = false;
+  showItems = true;
 
   nom: string = '';
   date: string = '';
