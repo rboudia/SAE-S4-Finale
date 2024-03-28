@@ -26,3 +26,17 @@ def affiche_match(id):
     else:
         return jsonify(match), 200
 
+
+@matchs_bp.route('/tournoi/<string:nom_tournoi>', methods=['GET'])
+def affiche_match_tournoi(nom_tournoi):
+    collection = bd.get_collection("matchs")
+    match = collection.find_one({"nomTournoi": nom_tournoi})
+
+    if not match:
+        return f"Aucun match n'est en cours pour le tournoi : {nom_tournoi}", 404
+    else:
+        matchs_tournoi = []
+        for match in collection.find({"nomTournoi": nom_tournoi}):
+            matchs_tournoi.append(match)
+
+        return jsonify(matchs_tournoi), 200
