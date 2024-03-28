@@ -35,6 +35,29 @@ def inserer_joueur():
 
     return "Joueur inséré avec succès", 201
 
+@joueurs_bp.route('/insertion_fichier', methods=['POST'])
+def inserer_joueurs():
+    joueurs = request.json
+    collection = bd.get_collection("joueurs")
+
+    for joueur in joueurs:
+        nom = joueur.get("nom")
+        prenom = joueur.get("prenom")
+        age = joueur.get("age")
+        niveau = joueur.get("niveau")
+
+        f = open("id/joueurs_id.txt", "r")
+        dernier_id = int(f.read()) + 1
+        f.close()
+
+        f = open("id/joueurs_id.txt", "w")
+        f.write(str(dernier_id))
+        f.close()
+
+        doc = {"_id": str(dernier_id), "nom": nom, "prenom": prenom, "Categorie": {"age": str(age), "niveau": niveau}}
+        collection.insert_one(doc)
+
+    return "Joueurs insérés avec succès", 201
 
 @joueurs_bp.route('/<string:nom>', methods=['GET'])
 def affiche_joueur(nom):

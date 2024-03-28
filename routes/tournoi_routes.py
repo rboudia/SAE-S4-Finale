@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request
 from Client2Mongo import Client2Mongo as Mongo
 from Tournoi import Tournoi
-from routes.equipement_routes import affiche_nb_equip
+from routes.equipement_routes import affiche_nb_equip, modif_statut_en_fonction_tournoi
+from routes.match_routes import suppresion_matchs_tournois
 import random
 
 tournois_bp = Blueprint('tournois', __name__)
@@ -79,6 +80,8 @@ def suppresion_tournoi(id_tournoi):
         return f"Aucun tournoi n'a été trouvé avec cet id : {id_tournoi}", 404
     else:
         collection.delete_one({"_id": id_tournoi})
+        suppresion_matchs_tournois(tournoi.get("nom"))
+        modif_statut_en_fonction_tournoi(id_tournoi)
         return "Suppression du tournoi effectuée avec succès", 200
 
 
