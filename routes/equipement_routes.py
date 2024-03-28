@@ -21,7 +21,7 @@ def insertion_equipement():
     f.write(str(dernier_id))
     f.close()
 
-    doc = {"_id": str(dernier_id), "type": type, "statut": "Disponible"}
+    doc = {"_id": str(dernier_id), "type": type, "statut": "Disponible", "idTournoi": "Aucun"}
     collection.insert_one(doc)
 
     return "Equipement inséré avec succès", 201
@@ -50,9 +50,9 @@ def affiche_equipement(id):
 @equipements_bp.route('/<string:id>', methods=['DELETE'])
 def suppresion_equipement(id):
     collection = bd.get_collection("equipements")
-    equipement = collection.find_one({"_id": id})
+    equipement = collection.find_one({"_id": id, "statut": "Disponible"})
     if equipement is None:
-        return f"Aucun equipement n'a été trouvé avec cet id : {id}", 404
+        return "Cette équipement est déja utilisée", 404
     else:
         collection.delete_one({"_id": id})
         return "Suppression de l'équipement effectuée avec succès", 200
@@ -61,7 +61,7 @@ def suppresion_equipement(id):
 @equipements_bp.route('/count/<string:type>', methods=['GET'])
 def affiche_nb_equip(type):
     collection = bd.get_collection("equipements")
-    nb_equipements = collection.count_documents({"type": type})
+    nb_equipements = collection.count_documents({"type": type, "statut": "Disponible"})
 
     if nb_equipements == 0:
         return f"Aucun equipement n'a été trouvé avec ce type : {type}", 404

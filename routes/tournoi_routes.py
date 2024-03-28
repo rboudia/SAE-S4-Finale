@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request
 from Client2Mongo import Client2Mongo as Mongo
 from Tournoi import Tournoi
+from routes.equipement_routes import affiche_nb_equip
+import random
 
 tournois_bp = Blueprint('tournois', __name__)
 
@@ -133,11 +135,12 @@ def affiche_nb_inscrit(id_tournoi):
         return str(nb_inscrits), 200
 
 
-@tournois_bp.route('/creer_match/<string:id_tournoi>')
+@tournois_bp.route('/creer_match/<string:id_tournoi>', methods=['PATCH'])
 def creation_match_tournois(id_tournoi):
     collection_tournoi = bd.get_collection("tournois")
     collection_joueur = bd.get_collection("joueurs")
     collection_match = bd.get_collection("matchs")
+    collection_equipement = bd.get_collection("equipements")
 
     tournoi = collection_tournoi.find_one({"_id": id_tournoi})
 
@@ -145,10 +148,68 @@ def creation_match_tournois(id_tournoi):
         return "Le tournoi n'existe pas", 404
 
     nb_inscrit = int(affiche_nb_inscrit(id_tournoi)[0])
+    nb_balle = int(affiche_nb_equip("balle")[0])
+    nb_table = int(affiche_nb_equip("table")[0])
+    nb_raquette = int(affiche_nb_equip("raquette")[0])
 
     if nb_inscrit < 4:
         return "Pas assez de joueurs pour créer des matchs", 404
     elif nb_inscrit % 2 != 0:
         return "Le nombre de participant doit être pair pour pouvoir créer les matchs", 409
+    elif nb_balle < nb_inscrit / 2:
+        return "Le nombre de balle est insufisant pour pouvoir créer les matchs", 430
+    elif nb_table < nb_inscrit / 2:
+        return f"Le nombre de table est insufisant pour pouvoir créer les matchs", 430
+    elif nb_raquette < nb_inscrit:
+        return "Le nombre de raquette est insufisant pour pouvoir créer les matchs", 430
     else:
-        return "Le nombre de participant est bon", 200
+        cond_balle = {"type": "balle", "statut": "Disponible"}
+        cond_table = {"type": "table", "statut": "Disponible"}
+        cond_raquette = {"type": "raquette", "statut": "Disponible"}
+
+        result_balle = collection_equipement.find(cond_balle).limit(int(nb_inscrit / 2))
+        result_table = collection_equipement.find(cond_table).limit(int(nb_inscrit / 2))
+        result_raquette = collection_equipement.find(cond_raquette).limit(int(nb_inscrit))
+
+        for doc in result_balle:
+            collection_equipement.update_one({"_id": doc["_id"]},
+                                             {"$set": {"statut": "Occupé", "idTournoi": id_tournoi}})
+
+        liste = list(result_table)
+
+        for doc in liste:
+            collection_equipement.update_one({"_id": doc["_id"]},
+                                             {"$set": {"statut": "Occupé", "idTournoi": id_tournoi}})
+
+        for doc in result_raquette:
+            collection_equipement.update_one({"_id": doc["_id"]},
+                                             {"$set": {"statut": "Occupé", "idTournoi": id_tournoi}})
+
+        joueurs_actuels = tournoi.get("Joueurs", [])
+        random.shuffle(joueurs_actuels)
+
+        paires_matchs = []
+        for i in range(0, len(joueurs_actuels), 2):
+            if i + 1 < len(joueurs_actuels):
+                paires_matchs.append((joueurs_actuels[i], joueurs_actuels[i + 1]))
+
+        a = 0
+
+        for paire in paires_matchs:
+            joueur_1 = paire[0]
+            joueur_2 = paire[1]
+
+            f = open("id/matchs_id.txt", "r")
+            dernier_id = int(f.read()) + 1
+            f.close()
+
+            f = open("id/matchs_id.txt", "w")
+            f.write(str(dernier_id))
+            f.close()
+
+            doc = {"_id": str(dernier_id), "idTournoi": id_tournoi, "phase": "Phase de poule", "format": "Simple",
+                   "joueurs": [joueur_1, joueur_2], "scores": "0-0", "idTable": liste[a].get("_id"), "status": "Prévu"}
+            collection_match.insert_one(doc)
+            a += 1
+
+        return "Les matchs ont été créer", 200
