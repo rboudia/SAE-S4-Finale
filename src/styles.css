@@ -271,9 +271,26 @@ form button:hover {
   margin-right: 15%;
   margin-bottom: 4%;
   display: flex;
-  min-height: 400px;
 }
 
+.search-containerM {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.content-areaM {
+  background-image: linear-gradient(to right, #ff8a00, #da1b60);
+  margin-left: 15%;
+  margin-right: 15%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  padding: 20px;
+  border-radius: 20px;
+}
 
 
 

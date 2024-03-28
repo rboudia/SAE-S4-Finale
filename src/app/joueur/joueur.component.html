@@ -7,13 +7,16 @@
         <input type="text" [(ngModel)]="prenom" name="prenom" placeholder="Prénom" />
         <input type="text" [(ngModel)]="age" name="age" placeholder="Age" />
         <div class="form-group">
+          <label for="niveau">Niveau:</label>
           <select class="form-control" id="niveau" name="niveau" [(ngModel)]="niveau" required>
-            <option value="" disabled selected hidden>Niveau</option> <!-- Placeholder -->
             <option value="Amateur">Amateur</option>
             <option value="Intermédiaire">Intermédiaire</option>
             <option value="Professionnel">Professionnel</option>
           </select>
         </div>
+        <input type="file" (change)="onFileChange($event)" accept=".json">
+        <button (click)="inscrireJoueurFichier()" [disabled]="!fichierCharge">Inscrire Joueurs</button>
+
         <button (ngSubmit)="inscrireJoueur()">S'inscrire</button>
       </form>
     </div>
@@ -31,6 +34,7 @@
         <p>Prénom: {{ joueurInfo.prenom }}</p>
         <p>Age: {{ joueurInfo.Categorie.age }}</p>
         <p>Niveau: {{ joueurInfo.Categorie.niveau }}</p>
+        <button (click)="supprimerJoueur(joueurInfo._id)">Supprimer ce joueur</button>
       </div>
     </div>
   </div>

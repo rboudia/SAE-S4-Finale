@@ -1,11 +1,26 @@
-<div class="content-area">
-  <div class="inner-content">
-    <div class="search-container">
-      <h2>Chercher Match</h2>
-      <form>
-        <input type="text"  name="match" placeholder="Entrez un nom de match">
-        <button >Rechercher Match</button>
-      </form>
-    </div>
+<div class="content-areaM">
+  <div class="inner-contentM">
+    <div class="search-containerM">
+        <h2>Rechercher les matchs d'un tournoi</h2>
+        <form (submit)="rechercherMatchs()">
+          <input type="text" [(ngModel)]="nomTournoi" name="nomTournoi" placeholder="Entrez un nom de tournoi">
+          <button type="submit">Rechercher</button>
+        </form>
+        <br>
+        <div *ngIf="matchs">
+          <div *ngFor="let match of matchs">
+            <p>Phase: {{ match.phase }}</p>
+            <p>Format: {{ match.format }}</p>
+            <p>Joueurs: {{ match.joueurs }}</p>
+            <p>Score: {{ match.scores }}</p>
+            <p>Statut: {{ match.status }}</p>
+            <p>---------------------------------</p>
+            <br>
+          </div>
+        </div>
+      </div>
   </div>
 </div>
+
+
+

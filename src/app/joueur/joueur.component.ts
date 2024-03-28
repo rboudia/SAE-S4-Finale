@@ -4,6 +4,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {JoueurService} from '../services/joueur.service';
 import {RouterOutlet} from "@angular/router";
+import { Joueur } from './joueur.module';
 
 @Component({
   selector: 'app-joueur',
@@ -21,6 +22,8 @@ export class JoueurComponent {
   prenom = '';
   age = '';
   niveau = '';
+  joueurs: Joueur[] = [];
+  fichierCharge: boolean = false;
 
   constructor(private joueurService: JoueurService) {
   }
@@ -57,5 +60,42 @@ export class JoueurComponent {
         console.error('Erreur lors de l\'inscription du joueur', erreur);
       }
     );
+  }
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      const jsonData = reader.result as string;
+      this.joueurs = JSON.parse(jsonData);
+      this.fichierCharge = true;
+    };
+    reader.readAsText(file);
+  }
+
+  inscrireJoueurFichier() {
+    if (this.joueurs.length === 0) {
+      alert("Aucun joueur à inscrire.");
+      return;
+    }
+    this.joueurService.ajouterJoueurFichier(this.joueurs).subscribe(
+      () => {
+        console.log('Joueurs inscrits avec succès');
+      },
+      erreur => {
+        console.error('Erreur lors de l\'inscription des joueurs', erreur);
+      }
+    );
+  }
+
+  supprimerJoueur(id: string) {
+      this.joueurService.supprimerJoueur(id).subscribe(
+        () => {
+          console.log('Joueur supprimé avec succès');
+          this.joueurInfo = null;
+        },
+        erreur => {
+          console.error('Erreur lors de la suppression du joueur', erreur);
+        }
+      );
   }
 }
