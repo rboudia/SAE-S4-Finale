@@ -153,15 +153,15 @@ def creation_match_tournois(id_tournoi):
     nb_raquette = int(affiche_nb_equip("raquette")[0])
 
     if nb_inscrit < 4:
-        return "Pas assez de joueurs pour créer des matchs", 404
+        return "Pas assez de joueurs pour créer des matchs", 409
     elif nb_inscrit % 2 != 0:
         return "Le nombre de participant doit être pair pour pouvoir créer les matchs", 409
     elif nb_balle < nb_inscrit / 2:
-        return "Le nombre de balle est insufisant pour pouvoir créer les matchs", 430
+        return "Le nombre de balle est insufisant pour pouvoir créer les matchs", 409
     elif nb_table < nb_inscrit / 2:
-        return f"Le nombre de table est insufisant pour pouvoir créer les matchs", 430
+        return f"Le nombre de table est insufisant pour pouvoir créer les matchs", 409
     elif nb_raquette < nb_inscrit:
-        return "Le nombre de raquette est insufisant pour pouvoir créer les matchs", 430
+        return "Le nombre de raquette est insufisant pour pouvoir créer les matchs", 409
     else:
         cond_balle = {"type": "balle", "statut": "Disponible"}
         cond_table = {"type": "table", "statut": "Disponible"}
@@ -207,7 +207,7 @@ def creation_match_tournois(id_tournoi):
             f.write(str(dernier_id))
             f.close()
 
-            doc = {"_id": str(dernier_id), "idTournoi": id_tournoi, "phase": "Phase de poule", "format": "Simple",
+            doc = {"_id": str(dernier_id), "nomTournoi": tournoi.get("nom"), "phase": "Phase de poule", "format": "Simple",
                    "joueurs": [joueur_1, joueur_2], "scores": "0-0", "idTable": liste[a].get("_id"), "status": "Prévu"}
             collection_match.insert_one(doc)
             a += 1
