@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TournoiService } from '../services/tournoi.service';
-import { JoueurService } from '../services/joueur.service';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {TournoiService} from '../services/tournoi.service';
+import {JoueurService} from '../services/joueur.service';
+import {CommonModule} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
+import {RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-modif-tournoi',
@@ -17,7 +17,8 @@ export class ModifTournoiComponent implements OnInit {
   tournoi: any;
   joueurs: any[] | undefined;
 
-  constructor(private router: Router, private route: ActivatedRoute, private tournoiService: TournoiService, private joueurService: JoueurService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private tournoiService: TournoiService, private joueurService: JoueurService) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -40,6 +41,7 @@ export class ModifTournoiComponent implements OnInit {
       }
     );
   }
+
   inscrireJoueur(idJoueur: string): void {
     const idTournoi = this.tournoi._id;
     this.tournoiService.inscrireJoueurAuTournoi(idTournoi, idJoueur).subscribe(
@@ -52,6 +54,13 @@ export class ModifTournoiComponent implements OnInit {
       }
     );
   }
+
+  confirmerSuppression() {
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce tournoi ?")) {
+      this.supprimerTournoi();
+    }
+  }
+
   supprimerTournoi(): void {
     const idTournoi = this.tournoi._id;
     this.tournoiService.supprimerTournoi(idTournoi).subscribe(
