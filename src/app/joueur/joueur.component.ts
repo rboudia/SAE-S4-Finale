@@ -58,16 +58,17 @@ export class JoueurComponent {
       age: this.age,
       niveau: this.niveau
     };
+
     this.joueurService.ajouterJoueur(joueurData).subscribe(
       data => {
         console.log('Joueur inscrit avec succès', data);
-        alert("Joueur inscrit !");
       },
       erreur => {
         console.error('Erreur lors de l\'inscription du joueur', erreur);
       }
     );
   }
+
   onFileChange(event: any) {
     const file = event.target.files[0];
     const reader = new FileReader();
