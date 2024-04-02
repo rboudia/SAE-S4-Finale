@@ -11,7 +11,12 @@
           <div *ngFor="let match of matchs">
             <p>Phase: {{ match.phase }}</p>
             <p>Format: {{ match.format }}</p>
-            <p>Joueurs: {{ match.joueurs }}</p>
+            <p>Joueurs : </p>
+            <ul>
+              <li *ngFor="let joueur of match.joueurs">
+                Id : {{joueur._id}}, Nom {{ joueur.nom }}, Prénom {{ joueur.prenom }}
+              </li>
+            </ul>
             <p>Score: {{ match.scores }}</p>
             <p>Statut: {{ match.status }}</p>
             <p>---------------------------------</p>

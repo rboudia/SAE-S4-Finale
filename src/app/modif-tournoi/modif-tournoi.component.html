@@ -6,7 +6,8 @@
           <p>Nom: {{ tournoi.nom }}</p>
           <p>Date de début: {{ tournoi.date.debut }}</p>
           <p>Date de fin: {{ tournoi.date.fin }}</p>
-          <p *ngFor="let joueurId of tournoi.Joueurs">Joueur : {{ joueurId }} </p>
+          <p>Joueurs inscrits : </p>
+          <p *ngFor="let joueur of tournoi.Joueurs">Id : {{ joueur._id }}, Nom : {{ joueur.nom }}, Prénom: {{joueur.prenom}} </p>
           <p>Catégorie d'âge: {{ tournoi.categories.age }}</p>
           <p>Niveau: {{ tournoi.categories.niveau }}</p>
           <p>Format: {{ tournoi.format }}</p>

@@ -14,7 +14,8 @@
           </a>
           <p>Date de début: {{ item.date.debut }}</p>
           <p>Date de fin: {{ item.date.fin }}</p>
-          <p *ngFor="let joueurId of item.Joueurs">Joueur : {{ joueurId }} </p>
+          <p>Joueurs inscrits : </p>
+          <p *ngFor="let joueur of item.Joueurs">Id : {{ joueur._id }}, Nom : {{ joueur.nom }}, Prénom: {{joueur.prenom}}</p>
           <p>Catégorie d'âge: {{ item.categories.age }}</p>
           <p>Niveau: {{ item.categories.niveau }}</p>
           <p>Format: {{ item.format }}</p>
