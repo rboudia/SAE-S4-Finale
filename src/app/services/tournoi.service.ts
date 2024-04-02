@@ -21,21 +21,10 @@ export class TournoiService {
     return this.http.get(`/api/tournois/${id}`);
   }
   inscrireJoueurAuTournoi(idTournoi: string, idJoueur: string): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    };
-
-    return this.http.patch(`/api/tournois/ajout_joueurs/${idTournoi}/${idJoueur}`, {}, httpOptions);
+    return this.http.patch(`/api/tournois/ajout_joueurs/${idTournoi}/${idJoueur}`, {});
   }
   supprimerTournoi(idTournoi: string): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      })
-    };
-    return this.http.delete(`/api/tournois/${idTournoi}`, httpOptions);
+    return this.http.delete(`/api/tournois/${idTournoi}`);
   }
 
   creerMatch(idTournoi: string): Observable<any> {

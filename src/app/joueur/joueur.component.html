@@ -1,32 +1,49 @@
 <div class="content-area">
-  <div class="inner-content">
-    <div class="inscription-container">
-      <h2>Inscription Joueur</h2>
-      <form (ngSubmit)="inscrireJoueur()">
-        <input type="text" [(ngModel)]="nom" name="nom" placeholder="Nom" />
-        <input type="text" [(ngModel)]="prenom" name="prenom" placeholder="Prénom" />
-        <input type="text" [(ngModel)]="age" name="age" placeholder="Age" />
-        <div class="form-group">
-          <label for="niveau">Niveau:</label>
-          <select class="form-control" id="niveau" name="niveau" [(ngModel)]="niveau" required>
-            <option value="Amateur">Amateur</option>
-            <option value="Intermédiaire">Intermédiaire</option>
-            <option value="Professionnel">Professionnel</option>
-          </select>
+      <div class="inner-content">
+        <div class="inscription-container">
+          <div class="insertion-champs">
+            <h2>Inscription joueur par champs</h2>
+            <form (ngSubmit)="inscrireJoueur()">
+              <input type="text" [(ngModel)]="nom" name="nom" placeholder="Nom" />
+              <input type="text" [(ngModel)]="prenom" name="prenom" placeholder="Prénom" />
+              <input type="text" [(ngModel)]="age" name="age" placeholder="Age" />
+              <div class="form-group">
+                <label for="niveau">Niveau:</label>
+                <select class="form-control" id="niveau" name="niveau" [(ngModel)]="niveau" required>
+                  <option value="Amateur">Amateur</option>
+                  <option value="Intermédiaire">Intermédiaire</option>
+                  <option value="Professionnel">Professionnel</option>
+                </select>
+              </div>
+              <button (ngSubmit)="inscrireJoueur()">Inscrire</button>
+            </form>
+          </div>
+          <div class="insertion-fichier">
+            <h2>Inscription joueurs par fichier</h2>
+            <p>Ici vous avec la possibilité d'insérer un fichier JSON avec un grand nombre de joueur
+            pour les insérer en une seule fois. Attention à respecter cette structure : <br> <br>
+              "nom": "nom1",
+              <br>
+              "prenom": "prenom1",
+              <br>
+              "age": "27",
+              <br>
+              "niveau": "Intermédiaire"
+              </p>
+            <br>
+            <form>
+              <input type="file" (change)="onFileChange($event)" accept=".json">
+              <button (click)="inscrireJoueurFichier()" [disabled]="!fichierCharge">Inscrire les joueurs</button>
+            </form>
+          </div>
         </div>
-        <input type="file" (change)="onFileChange($event)" accept=".json">
-        <button (click)="inscrireJoueurFichier()" [disabled]="!fichierCharge">Inscrire Joueurs</button>
-
-        <button (ngSubmit)="inscrireJoueur()">S'inscrire</button>
-      </form>
-    </div>
 
 
     <div class="search-container">
-      <h2>Chercher Joueur</h2>
+      <h2>Chercher joueur</h2>
       <form>
         <input type="text" [(ngModel)]="nomJoueur" name="nomJoueur" placeholder="Entrez un nom de joueur">
-        <button (click)="rechercheJoueur()">Rechercher Joueur</button>
+        <button (click)="rechercheJoueur()">Rechercher joueur</button>
       </form>
       <br>
       <div *ngIf="joueurInfo">
@@ -35,6 +52,9 @@
         <p>Age: {{ joueurInfo.Categorie.age }}</p>
         <p>Niveau: {{ joueurInfo.Categorie.niveau }}</p>
         <button (click)="supprimerJoueur(joueurInfo._id)">Supprimer ce joueur</button>
+      </div>
+      <div *ngIf="erreurMessage">
+        <p>{{ erreurMessage }}</p>
       </div>
     </div>
   </div>

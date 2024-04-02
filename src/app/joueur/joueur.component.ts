@@ -4,7 +4,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {JoueurService} from '../services/joueur.service';
 import {RouterOutlet} from "@angular/router";
-import { Joueur } from './joueur.module';
+import {Joueur} from './joueur.module';
 
 @Component({
   selector: 'app-joueur',
@@ -24,22 +24,29 @@ export class JoueurComponent {
   niveau = '';
   joueurs: Joueur[] = [];
   fichierCharge: boolean = false;
+  erreurMessage: string = '';
 
   constructor(private joueurService: JoueurService) {
   }
 
   rechercheJoueur() {
     if (!this.nomJoueur) {
-      alert('Entrez un nom de joueur.');
+      this.erreurMessage = 'Entrez un nom de joueur.';
       return;
     }
     this.joueurService.rechercheJoueur(this.nomJoueur).subscribe(
-      data => {
+      (data) => {
         this.joueurInfo = data;
         this.showItems2 = true;
+        this.erreurMessage = '';
       },
-      erreur => {
-        console.error('Erreur!', erreur);
+      (error) => {
+        console.error('Erreur!', error);
+        if (error.status === 404) {
+          this.erreurMessage = "Aucun joueur n'a été trouvé avec ce nom.";
+        } else {
+          this.erreurMessage = 'Une erreur s\'est produite. Veuillez réessayer plus tard.';
+        }
       }
     );
   }
@@ -48,13 +55,13 @@ export class JoueurComponent {
     const joueurData = {
       nom: this.nom,
       prenom: this.prenom,
-
       age: this.age,
       niveau: this.niveau
     };
     this.joueurService.ajouterJoueur(joueurData).subscribe(
       data => {
         console.log('Joueur inscrit avec succès', data);
+        alert("Joueur inscrit !");
       },
       erreur => {
         console.error('Erreur lors de l\'inscription du joueur', erreur);
@@ -80,6 +87,7 @@ export class JoueurComponent {
     this.joueurService.ajouterJoueurFichier(this.joueurs).subscribe(
       () => {
         console.log('Joueurs inscrits avec succès');
+        alert("Joueurs inscrits !")
       },
       erreur => {
         console.error('Erreur lors de l\'inscription des joueurs', erreur);

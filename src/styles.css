@@ -102,7 +102,6 @@ footer.navbar .navbar-brand {
   border-radius: 20px;
 }
 
-.inscription-container,
 .search-container {
   margin-top: 20px;
   padding: 20px;
@@ -291,6 +290,24 @@ form button:hover {
   padding: 20px;
   border-radius: 20px;
 }
+
+.inscription-container {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  display: flex;
+}
+
+.insertion-champs {
+  flex: 1;
+}
+
+.insertion-fichier {
+  flex: 1;
+  margin-left: 20px;
+}
+
 
 
 
