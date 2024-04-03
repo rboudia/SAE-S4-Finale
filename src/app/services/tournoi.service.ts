@@ -35,4 +35,8 @@ export class TournoiService {
     };
     return this.http.patch(`/api/tournois/creer_match/${idTournoi}`, httpOptions);
   }
+
+  modifierNomTournoi(idTournoi: string, champ: string, ancienNom: string, nouveauNom: string): Observable<any> {
+    return this.http.patch(`/api/tournois/modif/${idTournoi}/${champ}/${ancienNom}/${nouveauNom}`, {});
+  }
 }

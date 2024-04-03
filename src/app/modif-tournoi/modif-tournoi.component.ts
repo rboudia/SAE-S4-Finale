@@ -5,17 +5,22 @@ import {JoueurService} from '../services/joueur.service';
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+
 
 @Component({
   selector: 'app-modif-tournoi',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RouterModule],
+  imports: [CommonModule, HttpClientModule, RouterModule, FormsModule],
   providers: [TournoiService, JoueurService],
   templateUrl: './modif-tournoi.component.html',
 })
 export class ModifTournoiComponent implements OnInit {
   tournoi: any;
   joueurs: any[] | undefined;
+  nouveauChamp: string = '';
+  nouveauChamp2: string = '';
+  nouveauChamp3: string = '';
 
   constructor(private router: Router, private route: ActivatedRoute, private tournoiService: TournoiService, private joueurService: JoueurService) {
   }
@@ -84,5 +89,18 @@ export class ModifTournoiComponent implements OnInit {
       }
     );
   }
+
+  modifierChampTournoi(idTournoi: string, champ: string, ancienNom: string, nouveauNom: string): void {
+    this.tournoiService.modifierNomTournoi(idTournoi, champ, ancienNom, nouveauNom).subscribe(
+      () => {
+        console.log('Tournoi modifié avec succès');
+      },
+      error => {
+        console.error('Erreur lors de la modification du tournoi:', error);
+      }
+    );
+  }
+
+
 }
 

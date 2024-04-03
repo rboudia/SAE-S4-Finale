@@ -4,6 +4,8 @@
       <ul class="list-unstyled">
         <li *ngIf="tournoi" class="custom-item">
           <p>Nom: {{ tournoi.nom }}</p>
+          <input type="text" [(ngModel)]="nouveauChamp" placeholder="Nouveau nom">
+          <button (click)="modifierChampTournoi(tournoi._id, 'nom', tournoi.nom, nouveauChamp)">Modifier</button>
           <p>Date de début: {{ tournoi.date.debut }}</p>
           <p>Date de fin: {{ tournoi.date.fin }}</p>
           <p>Joueurs inscrits : </p>
@@ -11,7 +13,20 @@
           <p>Catégorie d'âge: {{ tournoi.categories.age }}</p>
           <p>Niveau: {{ tournoi.categories.niveau }}</p>
           <p>Format: {{ tournoi.format }}</p>
+          <select [(ngModel)]="nouveauChamp2">
+            <option value="Simple">Simple</option>
+            <option value="Double">Double</option>
+            <option value="Equipe">Equipe</option>
+            <option value="Mixte">Mixte</option>
+          </select>
+          <button (click)="modifierChampTournoi(tournoi._id, 'format', tournoi.format, nouveauChamp2)">Modifier</button>
           <p>Statut: {{ tournoi.status }}</p>
+          <select [(ngModel)]="nouveauChamp3">
+            <option value="Prévu">Prévu</option>
+            <option value="En cours">En cours</option>
+            <option value="Terminé">Terminé</option>
+          </select>
+          <button (click)="modifierChampTournoi(tournoi._id, 'status', tournoi.status, nouveauChamp3)">Modifier</button>
         </li>
       </ul>
     </div>
