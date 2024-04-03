@@ -151,7 +151,7 @@ def ajout_joueur(id_tournoi, id_joueur):
 
         # Récupération de la liste des joueurs qui sont déjà inscrit au tournoi
         joueurs_actuels = tournoi.get("Joueurs", [])
-        if len(joueurs_actuels) >= 5:
+        if len(joueurs_actuels) >= 8:
             return "Nombre maximal de joueurs atteint pour ce tournoi", 456
 
         if id_joueur not in joueurs_actuels:
