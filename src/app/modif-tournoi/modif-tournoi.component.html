@@ -38,7 +38,7 @@
       <div class="joueur-list">
         <ul *ngIf="joueurs" class="list-unstyled">
           <li *ngFor="let joueur of joueurs" class="joueur-item">
-            {{ joueur.nom }} | {{ joueur.prenom }} | {{ joueur.Categorie.niveau }}
+            {{ joueur.nom }} | {{ joueur.prenom }} | {{ joueur.Categorie.niveau }} | {{ joueur.Categorie.age }} ans
               <button (click)="inscrireJoueur(joueur._id)">Inscrire</button>
           </li>
         </ul>
