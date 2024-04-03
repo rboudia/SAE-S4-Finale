@@ -1,0 +1,13 @@
+<div>
+  <ul class="list-unstyled">
+    <li *ngFor="let match of matchs" class="custom-item">
+      <p>Phase : {{ match.phase }}</p>
+      <p>Format : {{ match.format }}</p>
+      <p>{{ match.joueurs[0].nom }} VS {{ match.joueurs[1].nom }}</p>
+      <p>Scores : {{ match.scores }}</p>
+      <p>Id de la table : {{ match.idTable }}</p>
+      <p>Statut : {{ match.statut }}</p>
+    </li>
+  </ul>
+</div>
+

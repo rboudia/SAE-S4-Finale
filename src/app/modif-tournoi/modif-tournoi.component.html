@@ -28,6 +28,7 @@
           </select>
           <button (click)="modifierChampTournoi(tournoi._id, 'status', tournoi.status, nouveauChamp3)">Modifier</button>
         </li>
+        <a [routerLink]="['/tournoi/', tournoi.nom, 'match']">Voire matchs</a>
       </ul>
     </div>
   </div>
