@@ -5,6 +5,7 @@ import {AcceuilComponent} from "./acceuil/acceuil.component"
 import { ModifTournoiComponent } from "./modif-tournoi/modif-tournoi.component";
 import { EquipementComponent } from "./equipement/equipement.component";
 import { MatchComponent } from "./match/match.component";
+import {ListMatchsTournoiComponent} from "./list-matchs-tournoi/list-matchs-tournoi.component";
 export const routes: Routes = [
   {path:'tournois', component: TournoiComponent},
   {path:'joueurs', component: JoueurComponent},
@@ -12,4 +13,5 @@ export const routes: Routes = [
   {path: 'modifier-tournoi/:id', component: ModifTournoiComponent },
   {path: 'equipement', component: EquipementComponent },
   {path: 'match', component: MatchComponent },
+  {path: 'tournoi/:nomTournoi/match', component: ListMatchsTournoiComponent},
 ];

@@ -13,6 +13,7 @@
           <p>Format: {{ tournoi.format }}</p>
           <p>Statut: {{ tournoi.status }}</p>
         </li>
+        <a [routerLink]="['/tournoi/', tournoi.nom, 'match']">Voire matchs</a>
       </ul>
     </div>
   </div>
