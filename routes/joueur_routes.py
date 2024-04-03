@@ -3,20 +3,21 @@ from Client2Mongo import Client2Mongo
 
 joueurs_bp = Blueprint('joueurs', __name__)
 
+# Ouverture de la connexion à la bd
 bd = Client2Mongo("rayan")
 
 
-@joueurs_bp.route('/nbJoueurs', methods=['GET'])
-def nombre_de_joueur():
-    nb_joueurs = bd.bd["joueurs"].count_documents({})
-    return jsonify(nb_joueurs)
-
-
+# Méthode qui permet l'insertion d'un joueur dans la bd
 @joueurs_bp.route('/', methods=['POST'])
 def inserer_joueur():
+
+    # Récupération des données envoyées via le formulaire
     joueur = request.json
+
+    # Récupération de la collection joueurs de la bd
     collection = bd.get_collection("joueurs")
 
+    # Décomposition de la requête pour gérer l'insertion du joueur
     nom = joueur.get("nom")
     prenom = joueur.get("prenom")
     age = joueur.get("age")
@@ -30,8 +31,11 @@ def inserer_joueur():
     f.write(str(dernier_id))
     f.close()
 
-    doc = {"_id": str(dernier_id), "nom": nom, "prenom": prenom, "Categorie": {"age": str(age), "niveau": niveau}}
-    collection.insert_one(doc)
+    # Création d'un document qui correspond aux champs de la collection joueurs
+    joueur = {"_id": str(dernier_id), "nom": nom, "prenom": prenom, "Categorie": {"age": str(age), "niveau": niveau}}
+
+    # Insertion du tournoi dans la collection joueurs de la bd
+    collection.insert_one(joueur)
 
     return "Joueur inséré avec succès", 201
 

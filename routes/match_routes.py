@@ -4,6 +4,7 @@ from Client2Mongo import Client2Mongo as Mongo
 
 matchs_bp = Blueprint('matchs', __name__)
 
+# Ouverture de la connexion à la bd
 bd = Mongo("rayan")
 
 
