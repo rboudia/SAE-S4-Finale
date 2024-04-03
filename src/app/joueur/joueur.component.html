@@ -38,24 +38,43 @@
           </div>
         </div>
 
+            <div *ngIf="!showItems2" class="search-container">
+              <h2>Chercher joueur</h2>
+              <form>
+                <input type="text" [(ngModel)]="nomJoueur" name="nomJoueur" placeholder="Entrez un nom de joueur">
+                <button (click)="rechercheJoueur()">Rechercher joueur</button>
+              <button (click)="afficherListeJoueurs()">Liste des joueurs</button>
+              </form>
+              <div *ngIf="erreurMessage">
+                <p>{{ erreurMessage }}</p>
+              </div>
+            </div>
 
-    <div class="search-container">
-      <h2>Chercher joueur</h2>
-      <form>
-        <input type="text" [(ngModel)]="nomJoueur" name="nomJoueur" placeholder="Entrez un nom de joueur">
-        <button (click)="rechercheJoueur()">Rechercher joueur</button>
-      </form>
-      <br>
-      <div *ngIf="joueurInfo">
-        <p>Nom: {{ joueurInfo.nom }}</p>
-        <p>Prénom: {{ joueurInfo.prenom }}</p>
-        <p>Age: {{ joueurInfo.Categorie.age }}</p>
-        <p>Niveau: {{ joueurInfo.Categorie.niveau }}</p>
-        <button (click)="supprimerJoueur(joueurInfo._id)">Supprimer ce joueur</button>
-      </div>
-      <div *ngIf="erreurMessage">
-        <p>{{ erreurMessage }}</p>
-      </div>
-    </div>
-  </div>
-</div>
+            <div *ngIf="showItems2 && !showItems3" class="joueur-list">
+              <h2>Liste des joueurs</h2>
+              <div *ngFor="let joueur of joueurs" class="joueur-item">
+                <p>Nom: {{ joueur.nom }}</p>
+                <p>Prénom: {{ joueur.prenom }}</p>
+                <a href="/joueurs">
+                  <button (click)="supprimerJoueur(joueur._id)">Supprimer ce joueur</button>
+                </a>
+              </div>
+              <button (click)="afficherRecherche()">Recherche de joueur</button>
+            </div>
+
+            <div *ngIf="showItems3" class="search-container">
+              <div>
+                <p>Nom: {{ joueurInfo.nom }}</p>
+                <p>Prénom: {{ joueurInfo.prenom }}</p>
+                <p>Age: {{ joueurInfo.Categorie.age }}</p>
+                <p>Niveau: {{ joueurInfo.Categorie.niveau }}</p>
+                <a href="/joueurs">
+                  <button (click)="supprimerJoueur(joueurInfo._id)" *ngIf="showItems3">Supprimer ce joueur</button>
+                </a>
+              </div>
+              <div *ngIf="erreurMessage">
+                <p>{{ erreurMessage }}</p>
+              </div>
+            </div>
+          </div>
+        </div>

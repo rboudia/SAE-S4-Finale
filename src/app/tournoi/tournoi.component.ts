@@ -76,11 +76,9 @@ export class TournoiComponent {
     this.serviceTournoi.insererTournoi(tournoiData).subscribe(
       response => {
         console.log('Tournoi inséré avec succès:', response);
-        // Gérer la réponse ici, par exemple afficher un message de succès à l'utilisateur
       },
       error => {
         console.error('Erreur lors de l\'insertion du tournoi:', error);
-        // Gérer les erreurs ici, par exemple afficher un message d'erreur à l'utilisateur
       }
     );
   }

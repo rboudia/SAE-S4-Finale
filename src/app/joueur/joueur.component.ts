@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
-import {JoueurService} from '../services/joueur.service';
-import {RouterOutlet} from "@angular/router";
-import {Joueur} from './joueur.module';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { JoueurService } from '../services/joueur.service';
+import { RouterOutlet } from "@angular/router";
+import { Joueur } from './joueur.module';
 
 @Component({
   selector: 'app-joueur',
@@ -16,6 +16,7 @@ import {Joueur} from './joueur.module';
 export class JoueurComponent {
   title = 'Projet';
   showItems2 = false;
+  showItems3 = false;
   nomJoueur = '';
   joueurInfo: any = null;
   nom = '';
@@ -26,30 +27,7 @@ export class JoueurComponent {
   fichierCharge: boolean = false;
   erreurMessage: string = '';
 
-  constructor(private joueurService: JoueurService) {
-  }
-
-  rechercheJoueur() {
-    if (!this.nomJoueur) {
-      this.erreurMessage = 'Entrez un nom de joueur.';
-      return;
-    }
-    this.joueurService.rechercheJoueur(this.nomJoueur).subscribe(
-      (data) => {
-        this.joueurInfo = data;
-        this.showItems2 = true;
-        this.erreurMessage = '';
-      },
-      (error) => {
-        console.error('Erreur!', error);
-        if (error.status === 404) {
-          this.erreurMessage = "Aucun joueur n'a été trouvé avec ce nom.";
-        } else {
-          this.erreurMessage = 'Une erreur s\'est produite. Veuillez réessayer plus tard.';
-        }
-      }
-    );
-  }
+  constructor(private joueurService: JoueurService) {}
 
   inscrireJoueur() {
     const joueurData = {
@@ -97,14 +75,61 @@ export class JoueurComponent {
   }
 
   supprimerJoueur(id: string) {
-      this.joueurService.supprimerJoueur(id).subscribe(
-        () => {
-          console.log('Joueur supprimé avec succès');
-          this.joueurInfo = null;
-        },
-        erreur => {
-          console.error('Erreur lors de la suppression du joueur', erreur);
-        }
-      );
+    this.joueurService.supprimerJoueur(id).subscribe(
+      () => {
+        console.log('Joueur supprimé avec succès');
+        this.joueurInfo = null;
+      },
+      erreur => {
+        console.error('Erreur lors de la suppression du joueur', erreur);
+      }
+    );
   }
+
+  afficherListeJoueurs() {
+    this.joueurService.afficherJoueur().subscribe(
+      (data) => {
+        this.joueurs = data;
+        this.showItems2 = true;
+        this.showItems3 = false;
+        this.erreurMessage = '';
+      },
+      (error) => {
+        console.error('Erreur!', error);
+        this.erreurMessage = 'Une erreur s\'est produite lors de la récupération de la liste des joueurs.';
+      }
+    );
+  }
+
+  rechercheJoueur() {
+    if (!this.nomJoueur) {
+      this.erreurMessage = 'Entrez un nom de joueur.';
+      return;
+    }
+    this.joueurService.rechercheJoueur(this.nomJoueur).subscribe(
+      (data) => {
+        this.joueurInfo = data;
+        this.showItems3 = true;
+        this.showItems2 = false;
+        this.erreurMessage = '';
+      },
+      (error) => {
+        console.error('Erreur!', error);
+        if (error.status === 404) {
+          this.erreurMessage = "Aucun joueur n'a été trouvé avec ce nom.";
+        } else {
+          this.erreurMessage = 'Une erreur s\'est produite. Veuillez réessayer plus tard.';
+        }
+      }
+    );
+  }
+
+  afficherRecherche() {
+    this.joueurInfo = null;
+    this.showItems3 = true;
+    this.showItems2 = false;
+    this.nomJoueur = '';
+    this.erreurMessage = '';
+  }
+
 }
