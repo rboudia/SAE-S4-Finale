@@ -25,7 +25,7 @@ class Tournoi:
         assert categorie[0][0] >= 0 and categorie[0][1] >= 0, "Les ages doivent être positifs"
         assert categorie[0][0] < categorie[0][1], "Age max doit etre sup a age min"
 
-        assert categorie[1] == "Amateur" or categorie[1] == "Intermédiaire" or categorie[1] == "Professionel", "Le niveau doit être parmi l'un des 3 suivants: Amateur, Intermédiaire, Professionel"
+        assert categorie[1] == "Amateur" or categorie[1] == "Intermédiaire" or categorie[1] == "Professionnel", "Le niveau doit être parmi l'un des 3 suivants: Amateur, Intermédiaire, Professionnel"
 
         self.nom = nom
         self.date = date

@@ -150,11 +150,13 @@ def ajout_joueur(id_tournoi, id_joueur):
 
         # Récupération de la liste des joueurs qui sont déjà inscrit au tournoi
         joueurs_actuels = tournoi.get("Joueurs", [])
-        print(joueurs_actuels[0].get("_id"))
+
+        if len(joueurs_actuels) >= 8:
+            return "Nombre maximal de joueurs atteint pour ce tournoi", 456
 
         id_joueur_present = any(joueur.get("_id") == id_joueur for joueur in joueurs_actuels)
         if id_joueur_present:
-            return "Le joueur est déja inscrit à ce tournoi.", 456
+            return "Le joueur est déja inscrit à ce tournoi.", 458
         else:
 
             # Récupération du niveau requis pour s'incrire au tournoi
