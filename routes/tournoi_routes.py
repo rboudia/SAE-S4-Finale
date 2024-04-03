@@ -10,11 +10,17 @@ tournois_bp = Blueprint('tournois', __name__)
 bd = Mongo("rayan")
 
 
+# Méthode qui permet l'insertion d'un tournoi dans la bd
 @tournois_bp.route('/', methods=['POST'])
 def insertion_tournoi():
+
+    # Récupération des données envoyées via le formulaire
     tournoi = request.json
+
+    # Récupération de la collection tournois de la bd
     collection = bd.get_collection("tournois")
 
+    # Décomposition de la requête pour gérer l'insertion du tournoi
     nom = tournoi.get("nom")
     date = tournoi.get("date")
     format = tournoi.get("format")
@@ -33,6 +39,7 @@ def insertion_tournoi():
     f.write(str(dernier_id))
     f.close()
 
+    # Insertion du tournoi dans la collection tournois de la bd
     doc = {"_id": str(dernier_id), "nom": nom, "date": {"debut": date, "fin": date}, "format": format,
            "categories": {"age": str(age_min) + "-" + str(age_max), "niveau": niveau}, "status": "Prévu"}
     collection.insert_one(doc)
@@ -40,30 +47,50 @@ def insertion_tournoi():
     return "Tournoi inséré avec succès", 201
 
 
-def modif_tournoi(old_nom_tourn: str, new_nom_tourn: str):
+@tournois_bp.route('/modif/<string:id_tournoi>/<string:nom_champ>/<string:ancienne_valeur>/<string:nouvelle_valeur>', methods=['PATCH'])
+def modif_tournoi(id_tournoi, nom_champ, ancienne_valeur, nouvelle_valeur):
     collection = bd.get_collection("tournois")
-    tournoi = collection.find_one({"nom": old_nom_tourn})
+    tournoi = collection.find_one({"_id": id_tournoi})
 
-    if tournoi is None:
-        print("Aucun tournoi n'a été trouvé avec ce nom : ", old_nom_tourn)
+    if not tournoi:
+        return f"Aucun tournoi n'a été trouvé avec cet id : {id_tournoi}", 404
     else:
-        filtre = {"nom": old_nom_tourn}
-        nouvelles_valeurs = {"$set": {"nom": new_nom_tourn}}
-        collection.update_one(filtre, nouvelles_valeurs)
+        tournoi = collection.find_one({"_id": id_tournoi, nom_champ: ancienne_valeur})
+
+        if not tournoi:
+            return f"Aucun valeur a été trouvé pour le champ {nom_champ}", 404
+        else:
+            filtre = {nom_champ: ancienne_valeur}
+            nouvelles_valeurs = {"$set": {nom_champ: nouvelle_valeur}}
+            collection.update_one(filtre, nouvelles_valeurs)
+
+            return "Modif avec succès", 200
 
 
+# Méthode qui permet d'afficher tous les tournois contenu dans la bd
 @tournois_bp.route('/', methods=['GET'])
 def affiche_tournois():
+
+    # Récupération de la collection tournois de la bd
     collection = bd.get_collection("tournois")
+
+    # Création d'une liste pour stocker les documents de la requête find
     tournois = []
+
+    # Ajout des documents dans la liste
     for tournoi in collection.find():
         tournois.append(tournoi)
-    return jsonify(tournois)
+    return jsonify(tournois), 200
 
 
+# Méthode qui permet d'afficher un tournoi et qui prend en paramètre l'id du tournoi voulue
 @tournois_bp.route('/<string:id_tournoi>', methods=['GET'])
 def affiche_tournoi(id_tournoi):
+
+    # Récupération de la collection tournois de la bd
     collection = bd.get_collection("tournois")
+
+    # Requête qui permet de vérifier si le tournoi existe
     tournoi = collection.find_one({"_id": id_tournoi})
 
     if not tournoi:
@@ -72,25 +99,47 @@ def affiche_tournoi(id_tournoi):
         return jsonify(tournoi), 200
 
 
+# Méthode qui permet de supprimer un tournoi et qui prend en paramètre l'id du tournoi qu'on souhaite supprimer
 @tournois_bp.route('/<string:id_tournoi>', methods=['DELETE'])
 def suppresion_tournoi(id_tournoi):
+
+    # Récupération de la collection tournois de la bd
     collection = bd.get_collection("tournois")
+
+    # Requête qui permet de vérifier si le tournoi existe
     tournoi = collection.find_one({"_id": id_tournoi})
+
     if tournoi is None:
         return f"Aucun tournoi n'a été trouvé avec cet id : {id_tournoi}", 404
     else:
+
+        # Suppression dans la collection tournois
         collection.delete_one({"_id": id_tournoi})
+
+        # Suppression des matchs du tournoi dans la collection matchs
         suppresion_matchs_tournois(tournoi.get("nom"))
+
+        # Modification de la disponibilité des équipements dans la collection équipements
         modif_statut_en_fonction_tournoi(id_tournoi)
+
         return "Suppression du tournoi effectuée avec succès", 200
 
 
+# Méthode qui permet d'inscrire un joueur à un tournoi et qui prend en paramètre l'id du joueur à ajouté et l'id du
+# tournoi dans lequel on ajoute le joueur
 @tournois_bp.route('/ajout_joueurs/<string:id_tournoi>/<string:id_joueur>', methods=['PATCH'])
 def ajout_joueur(id_tournoi, id_joueur):
+
+    # Récupération de la collection joueurs de la bd
     collection_joueur = bd.get_collection("joueurs")
+
+    # Récupération de la collection tournois de la bd
     collection_tournoi = bd.get_collection("tournois")
 
+    # Requête qui permet de vérifier si le tournoi existe
     tournoi = collection_tournoi.find_one({"_id": id_tournoi})
+
+    # Requête qui permet de vérifier si le joueur existe
     joueur = collection_joueur.find_one({"_id": id_joueur})
 
     if not tournoi:
@@ -100,19 +149,30 @@ def ajout_joueur(id_tournoi, id_joueur):
 
     else:
 
+        # Récupération de la liste des joueurs qui sont déjà inscrit au tournoi
         joueurs_actuels = tournoi.get("Joueurs", [])
+        if len(joueurs_actuels) >= 5:
+            return "Nombre maximal de joueurs atteint pour ce tournoi", 456
 
         if id_joueur not in joueurs_actuels:
 
+            # Récupération du niveau requis pour s'incrire au tournoi
             niveau_tournoi = tournoi.get("categories", {}).get("niveau")
+
+            # Récupération du niveau du joueur
             niveau_joueur = joueur.get("Categorie", {}).get("niveau")
 
+            # Récupération du de l'age requis pour s'incrire au tournoi
             age_tournoi = str(tournoi.get("categories", {}).get("age"))
             age_min, age_max = age_tournoi.split("-")
+
+            # Récupération de l'âge du joueur
             age_joueur = int(joueur.get("Categorie", {}).get("age"))
 
             if niveau_joueur == niveau_tournoi and int(age_min) <= age_joueur <= int(age_max):
-                joueurs_actuels.append(id_joueur)
+                nom = joueur.get("nom")
+                prenom = joueur.get("prenom")
+                joueurs_actuels.append({"_id": id_joueur, "nom": nom, "prenom": prenom})
 
                 filtre = {"_id": id_tournoi}
                 nouvelles_valeurs = {"$set": {"Joueurs": joueurs_actuels}}
@@ -122,6 +182,28 @@ def ajout_joueur(id_tournoi, id_joueur):
                 return "Le joueur ne correspond pas aux critères d'âge ou de niveau du tournoi", 450
         else:
             return "Le joueur est déjà inscrit dans ce tournoi", 455
+
+
+@tournois_bp.route('/retirer_joueur/<string:id_tournoi>/<string:id_joueur>', methods=['DELETE'])
+def retirer_joueur(id_tournoi, id_joueur):
+    collection_tournoi = bd.get_collection("tournois")
+
+    tournoi = collection_tournoi.find_one({"_id": id_tournoi})
+
+    if not tournoi:
+        return "Le tournoi n'existe pas", 404
+
+    joueurs_actuels = tournoi.get("Joueurs", [])
+
+    if id_joueur in joueurs_actuels:
+        joueurs_actuels.remove(id_joueur)
+
+        filtre = {"_id": id_tournoi}
+        nouvelles_valeurs = {"$set": {"Joueurs": joueurs_actuels}}
+        collection_tournoi.update_one(filtre, nouvelles_valeurs)
+        return "Le joueur a bien été retiré du tournoi", 200
+    else:
+        return "Le joueur n'est pas inscrit dans ce tournoi", 404
 
 
 @tournois_bp.route('/nb_inscrit/<string:id_tournoi>', methods=['GET'])
@@ -209,8 +291,9 @@ def creation_match_tournois(id_tournoi):
             f.write(str(dernier_id))
             f.close()
 
-            doc = {"_id": str(dernier_id), "nomTournoi": tournoi.get("nom"), "phase": "Phase de poule", "format": "Simple",
-                   "joueurs": [joueur_1, joueur_2], "scores": "0-0", "idTable": liste[a].get("_id"), "status": "Prévu"}
+            doc = {"_id": str(dernier_id), "nomTournoi": tournoi.get("nom"), "phase": "Phase de poule",
+                   "format": "Simple", "joueurs": [joueur_1, joueur_2], "scores": "0-0",
+                   "idTable": liste[a].get("_id"), "status": "Prévu"}
             collection_match.insert_one(doc)
             a += 1
 
