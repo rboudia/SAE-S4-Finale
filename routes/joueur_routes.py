@@ -35,6 +35,7 @@ def inserer_joueur():
 
     return "Joueur inséré avec succès", 201
 
+
 @joueurs_bp.route('/insertion_fichier', methods=['POST'])
 def inserer_joueurs():
     joueurs = request.json
@@ -59,6 +60,7 @@ def inserer_joueurs():
 
     return "Joueurs insérés avec succès", 201
 
+
 @joueurs_bp.route('/<string:nom>', methods=['GET'])
 def affiche_joueur(nom):
     collection = bd.get_collection("joueurs")
@@ -80,11 +82,16 @@ def affiche_joueurs():
 
 
 @joueurs_bp.route('/<string:id>', methods=['DELETE'])
-def suppresion_joueur(id):
-    collection = bd.get_collection("joueurs")
-    joueur = collection.find_one({"_id": id})
+def suppression_joueur(id):
+    collection_joueur = bd.get_collection("joueurs")
+    collection_tournoi = bd.get_collection("tournois")
+
+    joueur = collection_joueur.find_one({"_id": id})
     if joueur is None:
         return f"Aucun joueur n'a été trouvé avec cet id : {id}", 404
-    else:
-        collection.delete_one({"_id": id})
-        return "Suppression du joueur effectuée avec succès", 200
+
+    if collection_tournoi.count_documents({"Joueurs._id": id}) > 0:
+        return "Le joueur est inscrit à au moins un tournoi. Impossible de le supprimer.", 400
+
+    collection_joueur.delete_one({"_id": id})
+    return "Suppression du joueur effectuée avec succès", 200

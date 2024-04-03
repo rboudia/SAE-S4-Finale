@@ -28,7 +28,7 @@ def affiche_match(id):
 
 
 @matchs_bp.route('/tournoi/<string:nom_tournoi>', methods=['GET'])
-def affiche_match_tournoi(nom_tournoi):
+def affiche_matchs_tournoi(nom_tournoi):
     collection = bd.get_collection("matchs")
     match = collection.find_one({"nomTournoi": nom_tournoi})
 
