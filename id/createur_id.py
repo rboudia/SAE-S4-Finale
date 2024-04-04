@@ -14,9 +14,23 @@ pour mettre le nouveau
 """
 
 
+"""
+Méthode qui permet de lire le dernier id d'une collection et de l'incrémenté pour gérér l'insertion
+d'un document d'une collection
+"""
+
+
 def creation_id(collection):
+
+    # Ouverture du fichier correspond à la collection passé en paramètre en mode lecture/écriture
     with open(f"id/{collection}_id.txt", "r+") as f:
+
+        # Incrémentation du dernier id stockée dans le fichier texte
         dernier_id = int(f.read()) + 1
+
+        # Déplacement au début du fichier
         f.seek(0)
+
+        # Ecriture du dernier id dans le fichier
         f.write(str(dernier_id))
     return dernier_id
