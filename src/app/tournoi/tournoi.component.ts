@@ -25,21 +25,6 @@ export class TournoiComponent {
   ageMax: number = 90;
   niveau: string = '';
 
-/*
-* {
-    _id: '52',
-    nomTournoi: 'Test',
-    phase: 'Phase de poule',
-    format: 'Simple',
-    joueurs: [
-      { _id: '2', nom: 'boudjemai', prenom: 'ali-akbar' },
-      { _id: '96', nom: 'Ward', prenom: 'Riley' }
-    ],
-    scores: '0-0',
-    idTable: '54',
-    status: 'Prévu'
-  }
-* */
   constructor(private http: HttpClient, private serviceTournoi: TournoiService, private router: Router) {
     this.getItems();
   }
