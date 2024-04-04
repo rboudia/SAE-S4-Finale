@@ -3,6 +3,7 @@ from Client2Mongo import Client2Mongo as Mongo
 from Tournoi import Tournoi
 from routes.equipement_routes import affiche_nb_equip, modif_statut_en_fonction_tournoi
 from routes.match_routes import suppresion_matchs_tournois
+from id.createur_id import creation_id
 import random
 
 tournois_bp = Blueprint('tournois', __name__)
@@ -31,13 +32,7 @@ def insertion_tournoi():
     # Creation d'un tournoi pour vérifier si les entrées sont bonnes
     t = Tournoi(nom, date, format, ((age_min, age_max), niveau))
 
-    f = open("id/tournois_id.txt", "r")
-    dernier_id = int(f.read()) + 1
-    f.close()
-
-    f = open("id/tournois_id.txt", "w")
-    f.write(str(dernier_id))
-    f.close()
+    dernier_id = creation_id("tournois")
 
     # Création d'un document qui correspond aux champs de la collection tournois
     tournoi = {"_id": str(dernier_id), "nom": nom, "date": {"debut": date, "fin": date}, "format": format,
@@ -284,18 +279,15 @@ def creation_match_tournois(id_tournoi):
             joueur_1 = paire[0]
             joueur_2 = paire[1]
 
-            f = open("id/matchs_id.txt", "r")
-            dernier_id = int(f.read()) + 1
-            f.close()
-
-            f = open("id/matchs_id.txt", "w")
-            f.write(str(dernier_id))
-            f.close()
+            dernier_id = creation_id("matchs")
 
             doc = {"_id": str(dernier_id), "nomTournoi": tournoi.get("nom"), "phase": "Phase de poule",
                    "format": "Simple", "joueurs": [joueur_1, joueur_2], "scores": "0-0",
                    "idTable": liste[a].get("_id"), "statut": "Prévu"}
             collection_match.insert_one(doc)
             a += 1
+
+            if a == 2:
+                a = 0
 
         return "Les matchs ont été créer", 200

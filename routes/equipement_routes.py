@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from Client2Mongo import Client2Mongo
+from id.createur_id import creation_id
 
 equipements_bp = Blueprint('equipements', __name__)
 
@@ -12,15 +13,9 @@ def insertion_equipement(nb_equip):
     collection = bd.get_collection("equipements")
 
     type = equipement.get("type").lower()
+
     for i in range(int(nb_equip)):
-
-        f = open("id/equipements_id.txt", "r")
-        dernier_id = int(f.read()) + 1
-        f.close()
-
-        f = open("id/equipements_id.txt", "w")
-        f.write(str(dernier_id))
-        f.close()
+        dernier_id = creation_id("equipements")
 
         doc = {"_id": str(dernier_id), "type": type, "statut": "Disponible", "idTournoi": "Aucun"}
         collection.insert_one(doc)
@@ -37,17 +32,6 @@ def affiche_equipements():
     return jsonify(equipements), 200
 
 
-@equipements_bp.route('/<string:id>', methods=['GET'])
-def affiche_equipement(id):
-    collection = bd.get_collection("equipements")
-    equipement = collection.find_one({"_id": id})
-
-    if not equipement:
-        return f"Aucun equipement n'a été trouvé avec cet id : {id}", 404
-    else:
-        return jsonify(equipement), 200
-
-
 @equipements_bp.route('/<string:id>', methods=['DELETE'])
 def suppresion_equipement(id):
     collection = bd.get_collection("equipements")
@@ -59,7 +43,6 @@ def suppresion_equipement(id):
         return "Suppression de l'équipement effectuée avec succès", 200
 
 
-@equipements_bp.route('/count/<string:type>', methods=['GET'])
 def affiche_nb_equip(type):
     collection = bd.get_collection("equipements")
     nb_equipements = collection.count_documents({"type": type, "statut": "Disponible"})
@@ -68,21 +51,6 @@ def affiche_nb_equip(type):
         return f"Aucun equipement disponible n'a été trouvé avec ce type : {type}", 404
     else:
         return str(nb_equipements)
-
-
-@equipements_bp.route('/type/<string:type>', methods=['GET'])
-def affiche_equipement_type(type):
-    collection = bd.get_collection("equipements")
-    equipement = collection.find_one({"type": type})
-
-    if not equipement:
-        return f"Aucun equipement n'a été trouvé avec ce type : {type}", 404
-    else:
-        equipements = []
-        for equipement in collection.find({"type": type}):
-            equipements.append(equipement)
-        return jsonify(equipements), 200
-
 
 
 def modif_statut_en_fonction_tournoi(id_tournoi):

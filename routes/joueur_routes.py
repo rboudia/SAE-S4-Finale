@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from Client2Mongo import Client2Mongo
+from id.createur_id import creation_id
 
 joueurs_bp = Blueprint('joueurs', __name__)
 
@@ -23,51 +24,54 @@ def inserer_joueur():
     age = joueur.get("age")
     niveau = joueur.get("niveau")
 
-    f = open("id/joueurs_id.txt", "r")
-    dernier_id = int(f.read()) + 1
-    f.close()
-
-    f = open("id/joueurs_id.txt", "w")
-    f.write(str(dernier_id))
-    f.close()
+    dernier_id = creation_id("joueurs")
 
     # Création d'un document qui correspond aux champs de la collection joueurs
     joueur = {"_id": str(dernier_id), "nom": nom, "prenom": prenom, "Categorie": {"age": str(age), "niveau": niveau}}
 
-    # Insertion du tournoi dans la collection joueurs de la bd
+    # Insertion du joueur dans la collection joueurs de la bd
     collection.insert_one(joueur)
 
     return "Joueur inséré avec succès", 201
 
 
+# Méthode qui permet l'insertion de joueurs dans la bd en fonction d'un fichier json
 @joueurs_bp.route('/insertion_fichier', methods=['POST'])
 def inserer_joueurs():
+
+    # Récupération du fichier envoyé
     joueurs = request.json
+
+    # Récupération de la collection joueurs de la bd
     collection = bd.get_collection("joueurs")
 
     for joueur in joueurs:
+
+        # Décomposition de joueur pour son insertion
         nom = joueur.get("nom")
         prenom = joueur.get("prenom")
         age = joueur.get("age")
         niveau = joueur.get("niveau")
 
-        f = open("id/joueurs_id.txt", "r")
-        dernier_id = int(f.read()) + 1
-        f.close()
+        dernier_id = creation_id("joueurs")
 
-        f = open("id/joueurs_id.txt", "w")
-        f.write(str(dernier_id))
-        f.close()
+        # Création d'un document qui correspond aux champs de la collection joueurs
+        joueur = {"_id": str(dernier_id), "nom": nom, "prenom": prenom, "Categorie": {"age": str(age), "niveau": niveau}}
 
-        doc = {"_id": str(dernier_id), "nom": nom, "prenom": prenom, "Categorie": {"age": str(age), "niveau": niveau}}
-        collection.insert_one(doc)
+        # Insertion du joueur dans la collection joueurs de la bd
+        collection.insert_one(joueur)
 
     return "Joueurs insérés avec succès", 201
 
 
+# Méthode qui permet d'afficher un joueur et qui prend en paramètre le nom du joueur chercher
 @joueurs_bp.route('/<string:nom>', methods=['GET'])
 def affiche_joueur(nom):
+
+    # Récupération de la collection joueurs de la bd
     collection = bd.get_collection("joueurs")
+
+    # Requête qui permet de vérifier si le joueur existe
     joueur = collection.find_one({"nom": nom})
 
     if joueur is None:
