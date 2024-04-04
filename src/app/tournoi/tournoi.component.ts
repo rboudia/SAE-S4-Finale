@@ -24,6 +24,7 @@ export class TournoiComponent {
   ageMin: number = 5;
   ageMax: number = 90;
   niveau: string = '';
+  temps: string = '';
 
   constructor(private http: HttpClient, private serviceTournoi: TournoiService, private router: Router) {
     this.getItems();
@@ -55,7 +56,8 @@ export class TournoiComponent {
       format: this.format,
       ageMin: this.ageMin,
       ageMax: this.ageMax,
-      niveau: this.niveau
+      niveau: this.niveau,
+      temps: this.temps
     };
 
     this.serviceTournoi.insererTournoi(tournoiData).subscribe(
