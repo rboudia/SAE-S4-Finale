@@ -5,7 +5,7 @@ from id.createur_id import creation_id
 equipements_bp = Blueprint('equipements', __name__)
 
 # Ouverture de la connexion à la bd
-bd = Client2Mongo("rayan")
+bd = Client2Mongo("MyTennisPlan")
 
 """
 Méthode qui permet d'insérer un équipement dans la collection equipement. 

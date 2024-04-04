@@ -5,7 +5,7 @@ from Client2Mongo import Client2Mongo as Mongo
 matchs_bp = Blueprint('matchs', __name__)
 
 # Ouverture de la connexion à la bd
-bd = Mongo("rayan")
+bd = Mongo("MyTennisPlan")
 
 
 # Méthode qui permet d'afficher les matchs d'un tournoi et qui prend en paramètre le nom du tournoi souhaité

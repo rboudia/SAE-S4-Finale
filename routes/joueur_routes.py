@@ -6,7 +6,7 @@ from classe.joueur import Joueur
 joueurs_bp = Blueprint('joueurs', __name__)
 
 # Ouverture de la connexion à la bd
-bd = Client2Mongo("rayan")
+bd = Client2Mongo("MyTennisPlan")
 
 
 # Méthode qui permet l'insertion d'un joueur dans la bd

@@ -1,0 +1,55 @@
+db.tournois.insertOne({
+    _id: '1',
+    nom: 'Championnat_International',
+    date: { debut: '15/04/2024', fin: '15/04/2024' },
+    format: 'Simple',
+    Categorie: { age: '5-90', niveau: 'Intermédiaire' },
+    status: 'Prévu'
+  })
+
+
+db.joueurs.insertMany([
+{
+    _id: '1',
+    nom: 'Doe',
+    prenom: 'John',
+    Categorie: { age: '27', niveau: 'Intermédiaire' }
+  },
+  {
+    _id: '2',
+    nom: 'Smith',
+    prenom: 'Emily',
+    Categorie: { age: '25', niveau: 'Amateur' }
+  },
+  {
+    _id: '3',
+    nom: 'Johnson',
+    prenom: 'Michael',
+    Categorie: { age: '30', niveau: 'Professionnel' }
+  }
+])
+
+
+db.matchs.insertOne({
+    _id: '1',
+    nomTournoi: 'Championnat_International',
+    phase: 'Phase de poule',
+    format: 'Simple',
+    joueurs: [
+      { _id: '93', nom: 'Brown', prenom: 'Jessica' },
+      { _id: '96', nom: 'Taylor', prenom: 'Olivia' }
+    ],
+    scores: '0-0',
+    idTable: '340',
+    statut: 'Prévu'
+  })
+
+
+db.equipements.insertOne({
+    _id: '1',
+    type: 'raquette',
+    statut: 'Disponible',
+    idTournoi: 'Aucun'
+  })
+
+

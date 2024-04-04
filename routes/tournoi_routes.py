@@ -9,7 +9,7 @@ import random
 tournois_bp = Blueprint('tournois', __name__)
 
 # Ouverture de la connexion à la bd
-bd = Mongo("rayan")
+bd = Mongo("MyTennisPlan")
 
 
 # Méthode qui permet l'insertion d'un tournoi dans la bd
