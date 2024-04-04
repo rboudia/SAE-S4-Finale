@@ -1,4 +1,4 @@
-from Tournoi import Tournoi
+from tournoi import Tournoi
 import unittest
 
 

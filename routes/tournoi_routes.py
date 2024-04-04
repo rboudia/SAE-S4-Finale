@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from Client2Mongo import Client2Mongo as Mongo
-from Tournoi import Tournoi
-from routes.equipement_routes import affiche_nb_equip, modif_statut_en_fonction_tournoi
+from classe.tournoi import Tournoi
+from routes.equipement_routes import affiche_nb_equip, modif_statut_en_fonction_tournoi, modif_statut_liste_equip
 from routes.match_routes import suppresion_matchs_tournois, modif_nom_tournoi
 from id.createur_id import creation_id
 import random
@@ -15,7 +15,6 @@ bd = Mongo("rayan")
 # Méthode qui permet l'insertion d'un tournoi dans la bd
 @tournois_bp.route('/', methods=['POST'])
 def insertion_tournoi():
-
     # Récupération des données envoyées via le formulaire
     tournoi = request.json
 
@@ -27,7 +26,7 @@ def insertion_tournoi():
                                                                                           "ageMin", "ageMax", "niveau"])
 
     # Creation d'un tournoi pour vérifier si les entrées sont bonnes
-    t = Tournoi(nom, date, format, ((age_min, age_max), niveau))
+    test_tournoi = Tournoi(nom, date, format, ((age_min, age_max), niveau))
 
     dernier_id = creation_id("tournois")
 
@@ -170,6 +169,7 @@ def ajout_joueur(id_tournoi: str, id_joueur: str):
 
         if id_joueur_present:
             return "Le joueur est déja inscrit à ce tournoi.", 458
+
         else:
 
             # Récupération du niveau requis pour s'incrire au tournoi et du niveau du joueur à inscrire
@@ -203,6 +203,7 @@ def ajout_joueur(id_tournoi: str, id_joueur: str):
             else:
                 return "Le joueur ne correspond pas aux critères d'âge ou de niveau du tournoi", 450
 
+
 # Méthode qui permet de savoir le nombre d'inscrits d'un tournoi
 @tournois_bp.route('/nb_inscrit/<string:id_tournoi>', methods=['GET'])
 def affiche_nb_inscrit(id_tournoi: str):
@@ -223,6 +224,24 @@ def affiche_nb_inscrit(id_tournoi: str):
         nb_inscrits = len(joueurs_inscrits)
 
         return str(nb_inscrits)
+
+
+"""
+Algorithme permettant de créer les premiers matchs d'un tournoi, dont l'identifiant est donné en paramètre.
+
+Pour que les matchs soient créés et que leur durée n'excède pas 30 minutes, 
+plusieurs conditions doivent être respectées :
+
+- Le nombre minimal de participants est de 4.
+- Le nombre maximal de participants est de 8.
+- Le nombre de tables disponibles doit être de 2.
+- Le nombre de balles disponibles doit être de 2.
+- Le nombre de raquettes disponibles doit être de 4.
+
+Une fois que ces conditions sont respectées, on modifie le statut de disponibilité des équipements 
+et on mélange la liste des inscrits pour créer des paires de 2 qui constitueront les matchs. 
+Ensuite, ces matchs seront créés.
+"""
 
 
 @tournois_bp.route('/creer_match/<string:id_tournoi>', methods=['PATCH'])
@@ -263,46 +282,57 @@ def creation_match_tournois(id_tournoi: str):
         cond_balle, cond_table, cond_raquette = [{"type": type, "statut": "Disponible"} for type in
                                                  ["balle", "table", "raquette"]]
 
+        """
+        Requête qui permet de récuperer les balles, les tables et les requêtes 
+        qui vont êtres utilisées pour le tournoi
+        """
         result_balle, result_table, result_raquette = [collection_equipement.find(cond).limit(limite) for cond, limite
                                                        in zip([cond_balle, cond_table, cond_raquette], [2, 2, 4])]
 
-        for doc in result_balle:
-            collection_equipement.update_one({"_id": doc["_id"]},
-                                             {"$set": {"statut": "Occupé", "idTournoi": id_tournoi}})
+        # Création d'une liste pour associer les tables aux matchs
+        liste_tables = list(result_table)
 
-        liste = list(result_table)
+        # Modification du statut des balles, des tables et des raquettes
+        for equipement in [result_balle, liste_tables, result_raquette]:
+            modif_statut_liste_equip(id_tournoi, equipement)
 
-        for doc in liste:
-            collection_equipement.update_one({"_id": doc["_id"]},
-                                             {"$set": {"statut": "Occupé", "idTournoi": id_tournoi}})
-
-        for doc in result_raquette:
-            collection_equipement.update_one({"_id": doc["_id"]},
-                                             {"$set": {"statut": "Occupé", "idTournoi": id_tournoi}})
-
+        # Récupération des joueurs inscrits pour les mettres dans les matchs
         joueurs_actuels = tournoi.get("Joueurs", [])
+
+        # Mélange de la liste pour créer des matchs aléatoires
         random.shuffle(joueurs_actuels)
 
+        # Création d'une liste pour stocker les paires des matchs
         paires_matchs = []
+
+        # Insertion deux à deux des joueurs pour faire des paires
         for i in range(0, len(joueurs_actuels), 2):
             if i + 1 < len(joueurs_actuels):
                 paires_matchs.append((joueurs_actuels[i], joueurs_actuels[i + 1]))
 
-        a = 0
+        # Id pour gérer l'association aux matchs
+        id_table = 0
 
+        # Création d'un match pour chaque paire
         for paire in paires_matchs:
+
+            # Récupération des joueurs de la paire
             joueur_1 = paire[0]
             joueur_2 = paire[1]
 
             dernier_id = creation_id("matchs")
 
-            doc = {"_id": str(dernier_id), "nomTournoi": tournoi.get("nom"), "phase": "Phase de poule",
-                   "format": "Simple", "joueurs": [joueur_1, joueur_2], "scores": "0-0",
-                   "idTable": liste[a].get("_id"), "statut": "Prévu"}
-            collection_match.insert_one(doc)
-            a += 1
+            # Création d'un document qui correspond aux champs de la collection matchs
+            match = {"_id": str(dernier_id), "nomTournoi": tournoi.get("nom"), "phase": "Phase de poule",
+                     "format": "Simple", "joueurs": [joueur_1, joueur_2], "scores": "0-0",
+                     "idTable": liste_tables[id_table].get("_id"), "statut": "Prévu"}
 
-            if a == 2:
-                a = 0
+            # Insertion du match dans la collection matchs de la bd
+            collection_match.insert_one(match)
+            id_table += 1
+
+            # Mise à zéro de l'id pour ne pas sortir du tableau et associé une même table pour plusieurs matchs
+            if id_table == 2:
+                id_table = 0
 
         return "Les matchs ont été crée", 200

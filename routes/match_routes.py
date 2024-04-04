@@ -49,6 +49,7 @@ def suppresion_matchs_tournois(nom_tournoi: str):
         collection.delete_many({"nomTournoi": nom_tournoi})
 
 
+# Méthode qui permet de modifier le nom du tournoi dans les matchs quand le nom du tournoi est modifié
 def modif_nom_tournoi(ancien_nom_tournoi, nouveau_nom_tournoi):
     collection = bd.get_collection("matchs")
 
@@ -61,4 +62,3 @@ def modif_nom_tournoi(ancien_nom_tournoi, nouveau_nom_tournoi):
         filtre = {"nomTournoi": ancien_nom_tournoi}
         nouvelle_valeur = {"$set": {"nomTournoi": nouveau_nom_tournoi}}
         collection.update_many(filtre, nouvelle_valeur)
-
