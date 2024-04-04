@@ -22,8 +22,10 @@ def insertion_tournoi():
     collection = bd.get_collection("tournois")
 
     # Décomposition de la requête pour gérer l'insertion du tournoi
-    nom, date, format, age_min, age_max, niveau = (tournoi.get(attribut) for attribut in ["nom", "date", "format",
-                                                                                          "ageMin", "ageMax", "niveau"])
+    nom, date, format, age_min, age_max, niveau, temps = (tournoi.get(attribut) for attribut in ["nom", "date",
+                                                                                                 "format", "ageMin",
+                                                                                                 "ageMax", "niveau",
+                                                                                                 "temps"])
 
     # Creation d'un tournoi pour vérifier si les entrées sont bonnes
     test_tournoi = Tournoi(nom, date, format, ((age_min, age_max), niveau))
@@ -32,7 +34,8 @@ def insertion_tournoi():
 
     # Création d'un document qui correspond aux champs de la collection tournois
     tournoi = {"_id": str(dernier_id), "nom": nom, "date": {"debut": date, "fin": date}, "format": format,
-               "Categorie": {"age": str(age_min) + "-" + str(age_max), "niveau": niveau}, "status": "Prévu"}
+               "Categorie": {"age": str(age_min) + "-" + str(age_max), "niveau": niveau}, "status": "Prévu",
+               "temps": temps}
 
     # Insertion du tournoi dans la collection tournois de la bd
     collection.insert_one(tournoi)
@@ -156,12 +159,16 @@ def ajout_joueur(id_tournoi: str, id_joueur: str):
     elif not joueur:
         return "Le joueur n'existe pas", 404
 
+
+
     else:
+        temps = int(tournoi.get("temps"))
+        nb_matchs = temps/5
 
         # Récupération de la liste des joueurs qui sont déjà inscrit au tournoi
         joueurs_inscrits = tournoi.get("Joueurs", [])
 
-        if len(joueurs_inscrits) >= 8:
+        if len(joueurs_inscrits) >= nb_matchs * 2:
             return "Nombre maximal de joueurs atteint pour ce tournoi", 456
 
         # Vérification de la présence du joueur dans listes des inscrits
@@ -233,7 +240,7 @@ Pour que les matchs soient créés et que leur durée n'excède pas 30 minutes,
 plusieurs conditions doivent être respectées :
 
 - Le nombre minimal de participants est de 4.
-- Le nombre maximal de participants est de 8.
+- Le nombre maximal ??????
 - Le nombre de tables disponibles doit être de 2.
 - Le nombre de balles disponibles doit être de 2.
 - Le nombre de raquettes disponibles doit être de 4.
@@ -253,6 +260,10 @@ def creation_match_tournois(id_tournoi: str):
     # Requête qui permet de vérifier si le tournoi existe
     tournoi = collection_tournoi.find_one({"_id": id_tournoi})
 
+    temps = int(tournoi.get("temps"))
+
+    nb_matchs = temps/5
+
     if not tournoi:
         return "Le tournoi n'existe pas", 404
     # Récupération du nombre de joueurs inscrits au tournoi
@@ -263,7 +274,7 @@ def creation_match_tournois(id_tournoi: str):
 
     if nb_inscrit < 4:
         return "Pas assez de joueurs pour créer des matchs", 451
-    elif nb_inscrit > 8:
+    elif nb_inscrit > nb_matchs * 2:
         return "Trop de joueurs pour créer des matchs", 452
     elif nb_inscrit % 2 != 0:
         return "Le nombre de participant doit être pair pour pouvoir créer les matchs", 439
