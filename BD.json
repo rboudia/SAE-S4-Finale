@@ -1,83 +1,55 @@
 db.tournois.insertOne({
-  "_id": "1",
-  "nom": "Championnat National",
-  "Joueurs": ["1", "2"],
-  "date": {
-    "debut": "06/03/2024",
-    "fin": "06/03/2024"
-  },
-  "format": "Simple",
-  "categories": {
-    "age": "25-35",
-    "niveau": "Avancé"
-  },
-  "nombreTables": 10,
-  "lieu": {
-    "adresse": "140 rue de la nouvelle france",
-    "ville": "Montreuil",
-    "codePostal": "93100",
-    "pays": "France"
-  },
-  "status": "Prévu",
-})
+    _id: '1',
+    nom: 'Championnat_International',
+    date: { debut: '15/04/2024', fin: '15/04/2024' },
+    format: 'Simple',
+    Categorie: { age: '5-90', niveau: 'Intermédiaire' },
+    status: 'Prévu'
+  })
 
 
 db.joueurs.insertMany([
 {
-  "_id": "1",
-  "nom": "boudia",
-  "prenom": "rayan",
-  "sexe": "homme",
-  "Categorie": {
-    "age": "27",
-    "niveau": "Intermédiaire"
-  }},
-{
-  "_id": "2",
-  "nom": "boudjemai",
-  "prenom": "ali-akbar",
-  "sexe": "homme",
-  "Categorie": {
-    "age": "26",
-    "niveau": "Intermédiaire"
-  }},
-{
-  "_id": "3",
-  "nom": "bdbouj",
-  "prenom": "aliray",
-  "sexe": "homme",
-  "Categorie": {
-    "age": "29",
-    "niveau": "Intermédiaire"
-  }}
+    _id: '1',
+    nom: 'Doe',
+    prenom: 'John',
+    Categorie: { age: '27', niveau: 'Intermédiaire' }
+  },
+  {
+    _id: '2',
+    nom: 'Smith',
+    prenom: 'Emily',
+    Categorie: { age: '25', niveau: 'Amateur' }
+  },
+  {
+    _id: '3',
+    nom: 'Johnson',
+    prenom: 'Michael',
+    Categorie: { age: '30', niveau: 'Professionnel' }
+  }
 ])
 
 
 db.matchs.insertOne({
-  "_id": "1",
-  "idTournoi": "1",
-  "phase": "Quart de finale",
-  "format": "Simple",
-  "joueurs": ["1", "2"],
-  "scores": "3-2",
-  "Heure": "14:00",
-  "table": "1",
-  "status": "En cours"
-})
+    _id: '1',
+    nomTournoi: 'Championnat_International',
+    phase: 'Phase de poule',
+    format: 'Simple',
+    joueurs: [
+      { _id: '93', nom: 'Brown', prenom: 'Jessica' },
+      { _id: '96', nom: 'Taylor', prenom: 'Olivia' }
+    ],
+    scores: '0-0',
+    idTable: '340',
+    statut: 'Prévu'
+  })
 
 
 db.equipements.insertOne({
-  "_id": "1",
-  "table": {
-    "emplacement": "Table 1",
-    "statut": "Disponible"
-  }
-})
-
-db.equipes.insertOne({
-  "_id": "equipe1",
-  "nom": "Les Champions",
-  "joueurs": ["1", "3"]
-})
+    _id: '1',
+    type: 'raquette',
+    statut: 'Disponible',
+    idTournoi: 'Aucun'
+  })
 
 
