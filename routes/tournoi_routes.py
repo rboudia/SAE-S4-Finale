@@ -159,16 +159,16 @@ def ajout_joueur(id_tournoi: str, id_joueur: str):
     elif not joueur:
         return "Le joueur n'existe pas", 404
 
-
-
     else:
         temps = int(tournoi.get("temps"))
-        nb_matchs = temps/5
+        nb_table = int(affiche_nb_equip("table"))
+        nb_matchs = temps//5 * 2
+        nb_matchs_finales = recup_nb_match(nb_matchs)[1]
 
         # Récupération de la liste des joueurs qui sont déjà inscrit au tournoi
         joueurs_inscrits = tournoi.get("Joueurs", [])
 
-        if len(joueurs_inscrits) >= nb_matchs * 2:
+        if len(joueurs_inscrits) >= nb_matchs_finales * 2:
             return "Nombre maximal de joueurs atteint pour ce tournoi", 456
 
         # Vérification de la présence du joueur dans listes des inscrits
@@ -262,7 +262,7 @@ def creation_match_tournois(id_tournoi: str):
 
     temps = int(tournoi.get("temps"))
 
-    nb_matchs = temps/5
+    nb_matchs = temps//5
 
     if not tournoi:
         return "Le tournoi n'existe pas", 404
@@ -274,11 +274,10 @@ def creation_match_tournois(id_tournoi: str):
 
     if nb_inscrit < 4:
         return "Pas assez de joueurs pour créer des matchs", 451
-    elif nb_inscrit > nb_matchs * 2:
-        return "Trop de joueurs pour créer des matchs", 452
+
     elif nb_inscrit % 2 != 0:
         return "Le nombre de participant doit être pair pour pouvoir créer les matchs", 439
-    elif nb_table < 2:
+    elif nb_table < 1:
         return "Le nombre de table est insufisant pour pouvoir créer les matchs", 459
     elif nb_balle < 2:
         return "Le nombre de balle est insufisant pour pouvoir créer les matchs", 469
@@ -347,3 +346,16 @@ def creation_match_tournois(id_tournoi: str):
                 id_table = 0
 
         return "Les matchs ont été crée", 200
+
+
+@tournois_bp.route('/nb_max_inscription/<string:id_tournoi>', methods=["GET"])
+def recup_nb_max_inscription(id_tournoi: str):
+    collection = bd.get_collection("tournois")
+
+    tournoi = collection.find_one({"_id": id_tournoi})
+
+    temps = int(tournoi.get("temps"))
+    nb_matchs = temps // 5 * 2
+    nb_matchs_finales = recup_nb_match(nb_matchs)[1]
+
+    return jsonify(nb_matchs_finales * 2), 201
