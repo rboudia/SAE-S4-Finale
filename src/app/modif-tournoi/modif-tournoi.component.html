@@ -10,8 +10,8 @@
           <p>Date de fin: {{ tournoi.date.fin }}</p>
           <p>Joueurs inscrits : </p>
           <p *ngFor="let joueur of tournoi.Joueurs">Id : {{ joueur._id }}, {{ joueur.nom }} {{joueur.prenom}} </p>
-          <p>Catégorie d'âge: {{ tournoi.categories.age }}</p>
-          <p>Niveau: {{ tournoi.categories.niveau }}</p>
+          <p>Catégorie d'âge: {{ tournoi.Categorie.age }}</p>
+          <p>Niveau: {{ tournoi.Categorie.niveau }}</p>
           <p>Format: {{ tournoi.format }}</p>
           <select [(ngModel)]="nouveauChamp2">
             <option value="Simple">Simple</option>
