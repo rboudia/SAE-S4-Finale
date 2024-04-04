@@ -21,6 +21,7 @@ export class ModifTournoiComponent implements OnInit {
   nouveauChamp: string = '';
   nouveauChamp2: string = '';
   nouveauChamp3: string = '';
+  retourMessage: string = '';
 
   constructor(private router: Router, private route: ActivatedRoute, private tournoiService: TournoiService, private joueurService: JoueurService) {
   }
@@ -83,9 +84,27 @@ export class ModifTournoiComponent implements OnInit {
     this.tournoiService.creerMatch(idTournoi).subscribe(
       (response: any) => {
         console.log(response);
+        this.retourMessage = '';
       },
       error => {
-        console.error('Erreur lors de la creation de match:', error);
+        console.error('Erreur lors de la création de match:', error);
+        if (error.status === 451) {
+          this.retourMessage = "Pas assez de joueurs pour créer des matchs";
+        } else if (error.status === 452) {
+          this.retourMessage = "Trop de joueurs pour créer des matchs";
+        } else if (error.status === 439) {
+          this.retourMessage = "Le nombre de participants doit être pair pour pouvoir créer les matchs";
+        } else if (error.status === 469) {
+          this.retourMessage = "Le nombre de balles est insuffisant pour pouvoir créer les matchs";
+        } else if (error.status === 459) {
+          this.retourMessage = "Le nombre de tables est insuffisant pour pouvoir créer les matchs";
+        } else if (error.status === 489) {
+          this.retourMessage = "Le nombre de raquettes est insuffisant pour pouvoir créer les matchs";
+        } else if (error.status === 500) {
+          this.retourMessage = "Erreur interne !";
+        } else if (error.status === 200) {
+          this.retourMessage = "Matchs crées !";
+        }
       }
     );
   }
@@ -100,7 +119,5 @@ export class ModifTournoiComponent implements OnInit {
       }
     );
   }
-
-
 }
 

@@ -28,7 +28,7 @@
           </select>
           <button (click)="modifierChampTournoi(tournoi._id, 'status', tournoi.status, nouveauChamp3)">Modifier</button>
         </li>
-        <a [routerLink]="['/tournoi/', tournoi.nom, 'match']">Voire matchs</a>
+        <a [routerLink]="['/tournoi/', tournoi.nom, 'match']">Voir les matchs</a>
       </ul>
     </div>
   </div>
@@ -46,6 +46,7 @@
       </div>
     </div>
     <div class="text-center">
+      <br>
       <a href="/tournois">
         <button (click)="confirmerSuppression()">Supprimer le tournoi</button>
       </a>
@@ -53,6 +54,9 @@
     <br>
     <div class="text-center">
         <button (click)="creerMatch()">Créer match</button>
+      <div *ngIf="retourMessage" class="error-message">
+        {{ retourMessage }}
+      </div>
     </div>
   </div>
 </div>
