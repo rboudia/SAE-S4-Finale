@@ -47,4 +47,18 @@ def suppresion_matchs_tournois(nom_tournoi: str):
 
         # Suppression des matchs associés au tournoi
         collection.delete_many({"nomTournoi": nom_tournoi})
-        return "La suppression a été effectuée", 200
+
+
+def modif_nom_tournoi(ancien_nom_tournoi, nouveau_nom_tournoi):
+    collection = bd.get_collection("matchs")
+
+    match = collection.find_one({"nomTournoi": ancien_nom_tournoi})
+
+    if not match:
+        return "Aucun match n'a été trouvé pour ce tournoi"
+    else:
+
+        filtre = {"nomTournoi": ancien_nom_tournoi}
+        nouvelle_valeur = {"$set": {"nomTournoi": nouveau_nom_tournoi}}
+        collection.update_many(filtre, nouvelle_valeur)
+
