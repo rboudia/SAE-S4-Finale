@@ -3,6 +3,7 @@ from Client2Mongo import Client2Mongo as Mongo
 from Tournoi import Tournoi
 from routes.equipement_routes import affiche_nb_equip, modif_statut_en_fonction_tournoi
 from routes.match_routes import suppresion_matchs_tournois
+from id.createur_id import creation_id
 import random
 
 tournois_bp = Blueprint('tournois', __name__)
@@ -31,13 +32,7 @@ def insertion_tournoi():
     # Creation d'un tournoi pour vérifier si les entrées sont bonnes
     t = Tournoi(nom, date, format, ((age_min, age_max), niveau))
 
-    f = open("id/tournois_id.txt", "r")
-    dernier_id = int(f.read()) + 1
-    f.close()
-
-    f = open("id/tournois_id.txt", "w")
-    f.write(str(dernier_id))
-    f.close()
+    dernier_id = creation_id("tournois")
 
     # Création d'un document qui correspond aux champs de la collection tournois
     tournoi = {"_id": str(dernier_id), "nom": nom, "date": {"debut": date, "fin": date}, "format": format,
@@ -51,7 +46,7 @@ def insertion_tournoi():
 
 @tournois_bp.route('/modif/<string:id_tournoi>/<string:nom_champ>/<string:ancienne_valeur>/<string:nouvelle_valeur>',
                    methods=['PATCH'])
-def modif_tournoi(id_tournoi, nom_champ, ancienne_valeur, nouvelle_valeur):
+def modif_tournoi(id_tournoi: str, nom_champ: str, ancienne_valeur: str, nouvelle_valeur: str):
     collection = bd.get_collection("tournois")
     tournoi = collection.find_one({"_id": id_tournoi})
 
@@ -87,7 +82,7 @@ def affiche_tournois():
 
 # Méthode qui permet d'afficher un tournoi et qui prend en paramètre l'id du tournoi voulue
 @tournois_bp.route('/<string:id_tournoi>', methods=['GET'])
-def affiche_tournoi(id_tournoi):
+def affiche_tournoi(id_tournoi: str):
     # Récupération de la collection tournois de la bd
     collection = bd.get_collection("tournois")
 
@@ -102,7 +97,7 @@ def affiche_tournoi(id_tournoi):
 
 # Méthode qui permet de supprimer un tournoi et qui prend en paramètre l'id du tournoi qu'on souhaite supprimer
 @tournois_bp.route('/<string:id_tournoi>', methods=['DELETE'])
-def suppresion_tournoi(id_tournoi):
+def suppresion_tournoi(id_tournoi: str):
     # Récupération de la collection tournois de la bd
     collection = bd.get_collection("tournois")
 
@@ -128,7 +123,7 @@ def suppresion_tournoi(id_tournoi):
 # Méthode qui permet d'inscrire un joueur à un tournoi et qui prend en paramètre l'id du joueur à ajouté et l'id du
 # tournoi dans lequel on ajoute le joueur
 @tournois_bp.route('/ajout_joueurs/<string:id_tournoi>/<string:id_joueur>', methods=['PATCH'])
-def ajout_joueur(id_tournoi, id_joueur):
+def ajout_joueur(id_tournoi: str, id_joueur: str):
     # Récupération de la collection joueurs de la bd
     collection_joueur = bd.get_collection("joueurs")
 
@@ -186,7 +181,7 @@ def ajout_joueur(id_tournoi, id_joueur):
 
 
 @tournois_bp.route('/retirer_joueur/<string:id_tournoi>/<string:id_joueur>', methods=['DELETE'])
-def retirer_joueur(id_tournoi, id_joueur):
+def retirer_joueur(id_tournoi: str, id_joueur: str):
     collection_tournoi = bd.get_collection("tournois")
 
     tournoi = collection_tournoi.find_one({"_id": id_tournoi})
@@ -208,7 +203,7 @@ def retirer_joueur(id_tournoi, id_joueur):
 
 
 @tournois_bp.route('/nb_inscrit/<string:id_tournoi>', methods=['GET'])
-def affiche_nb_inscrit(id_tournoi):
+def affiche_nb_inscrit(id_tournoi: str):
     collection = bd.get_collection("tournois")
     tournoi = collection.find_one({"_id": id_tournoi})
 
@@ -222,7 +217,7 @@ def affiche_nb_inscrit(id_tournoi):
 
 
 @tournois_bp.route('/creer_match/<string:id_tournoi>', methods=['PATCH'])
-def creation_match_tournois(id_tournoi):
+def creation_match_tournois(id_tournoi: str):
     collection_tournoi = bd.get_collection("tournois")
     collection_match = bd.get_collection("matchs")
     collection_equipement = bd.get_collection("equipements")
@@ -233,7 +228,9 @@ def creation_match_tournois(id_tournoi):
         return "Le tournoi n'existe pas", 404
 
     nb_inscrit = int(affiche_nb_inscrit(id_tournoi)[0])
-    nb_balle, nb_table, nb_raquette = [int(affiche_nb_equip(equip)[0]) for equip in ["balle", "table", "raquette"]]
+    nb_balle = int(affiche_nb_equip("balle"))
+    nb_table = int(affiche_nb_equip("table"))
+    nb_raquette = int(affiche_nb_equip("raquette"))
 
     if nb_inscrit < 4:
         return "Pas assez de joueurs pour créer des matchs", 451
@@ -241,10 +238,10 @@ def creation_match_tournois(id_tournoi):
         return "Trop de joueurs pour créer des matchs", 452
     elif nb_inscrit % 2 != 0:
         return "Le nombre de participant doit être pair pour pouvoir créer les matchs", 439
-    elif nb_balle < 2:
-        return "Le nombre de balle est insufisant pour pouvoir créer les matchs", 469
     elif nb_table < 2:
         return "Le nombre de table est insufisant pour pouvoir créer les matchs", 459
+    elif nb_balle < 2:
+        return "Le nombre de balle est insufisant pour pouvoir créer les matchs", 469
     elif nb_raquette < 4:
         return "Le nombre de raquette est insufisant pour pouvoir créer les matchs", 489
     else:
@@ -284,13 +281,7 @@ def creation_match_tournois(id_tournoi):
             joueur_1 = paire[0]
             joueur_2 = paire[1]
 
-            f = open("id/matchs_id.txt", "r")
-            dernier_id = int(f.read()) + 1
-            f.close()
-
-            f = open("id/matchs_id.txt", "w")
-            f.write(str(dernier_id))
-            f.close()
+            dernier_id = creation_id("matchs")
 
             doc = {"_id": str(dernier_id), "nomTournoi": tournoi.get("nom"), "phase": "Phase de poule",
                    "format": "Simple", "joueurs": [joueur_1, joueur_2], "scores": "0-0",
@@ -298,4 +289,7 @@ def creation_match_tournois(id_tournoi):
             collection_match.insert_one(doc)
             a += 1
 
-        return "Les matchs ont été créer", 200
+            if a == 2:
+                a = 0
+
+        return "Les matchs ont été crée", 200
