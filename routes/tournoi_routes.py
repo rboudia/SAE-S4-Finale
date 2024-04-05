@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from Client2Mongo import Client2Mongo as Mongo
 from classe.tournoi import Tournoi
-from fonction.match_fonctions import modif_nom_tournoi, suppresion_matchs_tournois, recup_nb_match
+from fonction.match_fonctions import modif_nom_tournoi, suppresion_matchs_tournois, recup_nb_match,calcul
 from fonction.equipement_fonctions import modif_statut_liste_equip, modif_statut_en_fonction_tournoi, affiche_nb_equip
 from id.createur_id import creation_id
 import random
@@ -362,3 +362,16 @@ def recup_nb_max_inscription(id_tournoi: str):
     nb_matchs_finales = recup_nb_match(nb_matchs)[1]
 
     return jsonify(nb_matchs_finales * 2), 201
+
+
+@tournois_bp.route('/nb_matchs_tournoi/<string:nom_tournoi>', methods=["GET"])
+def recup_nb_matchs(nom_tournoi: str):
+
+    collection_matchs = bd.get_collection("matchs")
+
+    compteur = collection_matchs.count_documents({"nomTournoi": nom_tournoi})
+
+    retour = calcul(compteur)
+
+    return jsonify(retour), 201
+
