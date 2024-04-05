@@ -62,3 +62,23 @@ def recup_nb_match(matchs_totales):
     premier_niveau = liste[0]
 
     return premier_niveau
+
+
+def calcul(matchs):
+    x = matchs
+    i = 1
+    liste_niveau = []
+    liste_niveau.append((i, x))
+
+    if matchs % 2 != 0:
+        matchs = matchs + 1
+    resultat = matchs
+
+    while resultat != 1:
+        resultat = matchs//2
+        matchs = resultat
+        x += matchs
+        i += 1
+        liste_niveau.append((i, resultat))
+
+    return liste_niveau

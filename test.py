@@ -1,3 +1,6 @@
+from fonction.match_fonctions import *
+
+
 def niveaux_arbre_tournoi(matchs_totales):
     niveaus = []
     matchs_restants = matchs_totales
@@ -14,12 +17,12 @@ def niveaux_arbre_tournoi(matchs_totales):
 
 
 def recup_match(matchs_totales):
-
     nb_matchs = 0
     for niveau in niveaux_arbre_tournoi(matchs_totales):
         nb_matchs += niveau[1]
 
     return nb_matchs
 
-# Exemple d'utilisation
-print(36//5)
+
+liste = calcul(7)
+print(liste)

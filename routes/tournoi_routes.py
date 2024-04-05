@@ -362,3 +362,16 @@ def recup_nb_max_inscription(id_tournoi: str):
     nb_matchs_finales = recup_nb_match(nb_matchs)[1]
 
     return jsonify(nb_matchs_finales * 2), 201
+
+
+@tournois_bp.route('/nb_matchs_tournoi/<string:nom_tournoi>', methods=["GET"])
+def recup_nb_matchs(nom_tournoi: str):
+
+    collection_matchs = bd.get_collection("matchs")
+
+    compteur = collection_matchs.count_documents({"nomTournoi": nom_tournoi})
+
+    retour = calcul(compteur)
+
+    return jsonify(retour), 201
+
