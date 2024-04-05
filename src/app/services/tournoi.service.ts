@@ -46,4 +46,8 @@ export class TournoiService {
   nbMaxInscrits(idTournoi: string) {
     return this.http.get(`api/tournois/nb_max_inscription/${idTournoi}`);
   }
+
+  recupNbMatchsTournoi(nomTournoi: string): Observable<any> {
+    return this.http.get(`/api/tournois/nb_matchs_tournoi/${nomTournoi}`);
+  }
 }

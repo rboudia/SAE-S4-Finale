@@ -1,5 +1,8 @@
 <div>
   <ul class="list-unstyled">
+    <li *ngFor="let infoT of infoTournoi" class="custom-item">
+      <p>Lors du tour {{infoT.etape}} il y a {{infoT.nbMatch}} match(s)</p>
+    </li>
     <li *ngFor="let match of matchs" class="custom-item">
       <p>Phase : {{ match.phase }}</p>
       <p>Format : {{ match.format }}</p>

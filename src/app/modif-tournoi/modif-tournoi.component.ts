@@ -21,6 +21,7 @@ export class ModifTournoiComponent implements OnInit {
   nouveauChamp: string = '';
   nouveauChamp2: string = '';
   nouveauChamp3: string = '';
+  nouveauTemps: string = '';
   retourMessage: string = '';
   nbMaxInscrits: string = '';
 

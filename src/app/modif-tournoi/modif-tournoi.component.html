@@ -8,6 +8,9 @@
           <button (click)="modifierChampTournoi(tournoi._id, 'nom', tournoi.nom, nouveauChamp)">Modifier</button>
           <p>Date de début: {{ tournoi.date.debut }}</p>
           <p>Date de fin: {{ tournoi.date.fin }}</p>
+          <p>Durée: {{ tournoi.temps }} minutes</p>
+          <input type="text" [(ngModel)]="nouveauTemps" placeholder="Nouveau temps">
+          <button (click)="modifierChampTournoi(tournoi._id, 'temps', tournoi.temps, nouveauTemps)">Modifier</button>
           <p>Joueurs inscrits : </p>
           <p *ngFor="let joueur of tournoi.Joueurs">Id : {{ joueur._id }}, {{ joueur.nom }} {{ joueur.prenom }} </p>
           <p>Catégorie d'âge: {{ tournoi.Categorie.age }}</p>
