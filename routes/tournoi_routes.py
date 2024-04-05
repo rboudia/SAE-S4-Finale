@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 from Client2Mongo import Client2Mongo as Mongo
 from classe.tournoi import Tournoi
-from fonction.match_fonctions import modif_nom_tournoi, suppresion_matchs_tournois, recup_nb_match,calcul
-from fonction.equipement_fonctions import modif_statut_liste_equip, modif_statut_en_fonction_tournoi, affiche_nb_equip
+from fonction.match_fonctions import *
+from fonction.equipement_fonctions import *
 from id.createur_id import creation_id
 import random
 
@@ -261,10 +261,6 @@ def creation_match_tournois(id_tournoi: str):
     # Requête qui permet de vérifier si le tournoi existe
     tournoi = collection_tournoi.find_one({"_id": id_tournoi})
 
-    temps = int(tournoi.get("temps"))
-
-    nb_matchs = temps//5
-
     if not tournoi:
         return "Le tournoi n'existe pas", 404
     # Récupération du nombre de joueurs inscrits au tournoi
@@ -350,6 +346,12 @@ def creation_match_tournois(id_tournoi: str):
         return "Les matchs ont été crée", 200
 
 
+"""
+Méthode qui permet de récuperer le nombre maximal de joueur pouvant être inscrits 
+en fonction du nombre de tables dispo
+"""
+
+
 @tournois_bp.route('/nb_max_inscription/<string:id_tournoi>', methods=["GET"])
 def recup_nb_max_inscription(id_tournoi: str):
     collection = bd.get_collection("tournois")
@@ -364,14 +366,14 @@ def recup_nb_max_inscription(id_tournoi: str):
     return jsonify(nb_matchs_finales * 2), 201
 
 
+# Méthode qui récupère la liste des matchs qui vont se jouer pour un tournoi en fonction du nombre de matchs crées
 @tournois_bp.route('/nb_matchs_tournoi/<string:nom_tournoi>', methods=["GET"])
-def recup_nb_matchs(nom_tournoi: str):
+def recup_liste_matchs(nom_tournoi: str):
 
     collection_matchs = bd.get_collection("matchs")
 
     compteur = collection_matchs.count_documents({"nomTournoi": nom_tournoi})
 
-    retour = calcul(compteur)
+    liste = generer_liste_niveau(compteur)
 
-    return jsonify(retour), 201
-
+    return jsonify(liste), 201
