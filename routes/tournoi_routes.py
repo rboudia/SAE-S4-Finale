@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 from Client2Mongo import Client2Mongo as Mongo
 from classe.tournoi import Tournoi
-from fonction.equipement_fonctions import *
-from fonction.match_fonctions import *
+from fonction.match_fonctions import modif_nom_tournoi, suppresion_matchs_tournois, recup_nb_match,calcul
+from fonction.equipement_fonctions import modif_statut_liste_equip, modif_statut_en_fonction_tournoi, affiche_nb_equip
 from id.createur_id import creation_id
 import random
 

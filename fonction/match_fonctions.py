@@ -68,7 +68,7 @@ def calcul(matchs):
     x = matchs
     i = 1
     liste_niveau = []
-    liste_niveau.append((i, x))
+    liste_niveau.append({"etape" : i, "nbMatch" : x})
 
     if matchs % 2 != 0:
         matchs = matchs + 1
@@ -79,6 +79,6 @@ def calcul(matchs):
         matchs = resultat
         x += matchs
         i += 1
-        liste_niveau.append((i, resultat))
+        liste_niveau.append({"etape" : i, "nbMatch" : resultat})
 
     return liste_niveau
