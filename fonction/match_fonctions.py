@@ -39,3 +39,26 @@ def modif_nom_tournoi(ancien_nom_tournoi, nouveau_nom_tournoi):
         filtre = {"nomTournoi": ancien_nom_tournoi}
         nouvelle_valeur = {"$set": {"nomTournoi": nouveau_nom_tournoi}}
         collection.update_many(filtre, nouvelle_valeur)
+
+
+def niveaux_arbre_tournoi(matchs_possibles):
+    niveaus = []
+    matchs_restants = matchs_possibles
+    matchs_au_niveau = 1
+    niveau = 1
+
+    while matchs_restants > 0 and matchs_restants >= matchs_au_niveau:
+        niveaus.append((niveau, matchs_au_niveau))
+        matchs_restants -= matchs_au_niveau
+        niveau += 1
+        matchs_au_niveau *= 2
+        liste_inverse = niveaus[::-1]
+    return liste_inverse
+
+
+def recup_nb_match(matchs_totales):
+
+    liste = niveaux_arbre_tournoi(matchs_totales)
+    premier_niveau = liste[0]
+
+    return premier_niveau

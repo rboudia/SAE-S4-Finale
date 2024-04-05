@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from Client2Mongo import Client2Mongo as Mongo
 from classe.tournoi import Tournoi
-from fonction.match_fonctions import modif_nom_tournoi, suppresion_matchs_tournois
+from fonction.match_fonctions import modif_nom_tournoi, suppresion_matchs_tournois, recup_nb_match
 from fonction.equipement_fonctions import modif_statut_liste_equip, modif_statut_en_fonction_tournoi, affiche_nb_equip
 from id.createur_id import creation_id
 import random
@@ -22,8 +22,10 @@ def insertion_tournoi():
     collection = bd.get_collection("tournois")
 
     # Décomposition de la requête pour gérer l'insertion du tournoi
-    nom, date, format, age_min, age_max, niveau = (tournoi.get(attribut) for attribut in ["nom", "date", "format",
-                                                                                          "ageMin", "ageMax", "niveau"])
+    nom, date, format, age_min, age_max, niveau, temps = (tournoi.get(attribut) for attribut in ["nom", "date",
+                                                                                                 "format", "ageMin",
+                                                                                                 "ageMax", "niveau",
+                                                                                                 "temps"])
 
     # Creation d'un tournoi pour vérifier si les entrées sont bonnes
     test_tournoi = Tournoi(nom, date, format, ((age_min, age_max), niveau))
@@ -32,7 +34,8 @@ def insertion_tournoi():
 
     # Création d'un document qui correspond aux champs de la collection tournois
     tournoi = {"_id": str(dernier_id), "nom": nom, "date": {"debut": date, "fin": date}, "format": format,
-               "Categorie": {"age": str(age_min) + "-" + str(age_max), "niveau": niveau}, "status": "Prévu"}
+               "Categorie": {"age": str(age_min) + "-" + str(age_max), "niveau": niveau}, "status": "Prévu",
+               "temps": temps}
 
     # Insertion du tournoi dans la collection tournois de la bd
     collection.insert_one(tournoi)
@@ -157,11 +160,16 @@ def ajout_joueur(id_tournoi: str, id_joueur: str):
         return "Le joueur n'existe pas", 404
 
     else:
+        temps = int(tournoi.get("temps"))
+
+        nb_table = int(affiche_nb_equip("table"))
+        nb_matchs = temps // 5 * nb_table
+        nb_matchs_finales = recup_nb_match(nb_matchs)[1]
 
         # Récupération de la liste des joueurs qui sont déjà inscrit au tournoi
         joueurs_inscrits = tournoi.get("Joueurs", [])
 
-        if len(joueurs_inscrits) >= 8:
+        if len(joueurs_inscrits) >= nb_matchs_finales * 2:
             return "Nombre maximal de joueurs atteint pour ce tournoi", 456
 
         # Vérification de la présence du joueur dans listes des inscrits
@@ -233,7 +241,7 @@ Pour que les matchs soient créés et que leur durée n'excède pas 30 minutes,
 plusieurs conditions doivent être respectées :
 
 - Le nombre minimal de participants est de 4.
-- Le nombre maximal de participants est de 8.
+- Le nombre maximal ??????
 - Le nombre de tables disponibles doit être de 2.
 - Le nombre de balles disponibles doit être de 2.
 - Le nombre de raquettes disponibles doit être de 4.
@@ -253,6 +261,10 @@ def creation_match_tournois(id_tournoi: str):
     # Requête qui permet de vérifier si le tournoi existe
     tournoi = collection_tournoi.find_one({"_id": id_tournoi})
 
+    temps = int(tournoi.get("temps"))
+
+    nb_matchs = temps//5
+
     if not tournoi:
         return "Le tournoi n'existe pas", 404
     # Récupération du nombre de joueurs inscrits au tournoi
@@ -263,15 +275,14 @@ def creation_match_tournois(id_tournoi: str):
 
     if nb_inscrit < 4:
         return "Pas assez de joueurs pour créer des matchs", 451
-    elif nb_inscrit > 8:
-        return "Trop de joueurs pour créer des matchs", 452
+
     elif nb_inscrit % 2 != 0:
         return "Le nombre de participant doit être pair pour pouvoir créer les matchs", 439
-    elif nb_table < 2:
+    elif nb_table < 1:
         return "Le nombre de table est insufisant pour pouvoir créer les matchs", 459
-    elif nb_balle < 2:
+    elif nb_balle < nb_table:
         return "Le nombre de balle est insufisant pour pouvoir créer les matchs", 469
-    elif nb_raquette < 4:
+    elif nb_raquette < nb_table * 2:
         return "Le nombre de raquette est insufisant pour pouvoir créer les matchs", 489
     else:
 
@@ -287,7 +298,8 @@ def creation_match_tournois(id_tournoi: str):
         qui vont êtres utilisées pour le tournoi
         """
         result_balle, result_table, result_raquette = [collection_equipement.find(cond).limit(limite) for cond, limite
-                                                       in zip([cond_balle, cond_table, cond_raquette], [2, 2, 4])]
+                                                       in zip([cond_balle, cond_table, cond_raquette],
+                                                              [nb_table, nb_table, nb_table * 2])]
 
         # Création d'une liste pour associer les tables aux matchs
         liste_tables = list(result_table)
@@ -332,7 +344,21 @@ def creation_match_tournois(id_tournoi: str):
             id_table += 1
 
             # Mise à zéro de l'id pour ne pas sortir du tableau et associé une même table pour plusieurs matchs
-            if id_table == 2:
+            if id_table == nb_table:
                 id_table = 0
 
         return "Les matchs ont été crée", 200
+
+
+@tournois_bp.route('/nb_max_inscription/<string:id_tournoi>', methods=["GET"])
+def recup_nb_max_inscription(id_tournoi: str):
+    collection = bd.get_collection("tournois")
+
+    tournoi = collection.find_one({"_id": id_tournoi})
+
+    temps = int(tournoi.get("temps"))
+    nb_table = int(affiche_nb_equip("table"))
+    nb_matchs = temps // 5 * nb_table
+    nb_matchs_finales = recup_nb_match(nb_matchs)[1]
+
+    return jsonify(nb_matchs_finales * 2), 201
