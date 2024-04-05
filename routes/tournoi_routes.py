@@ -161,8 +161,9 @@ def ajout_joueur(id_tournoi: str, id_joueur: str):
 
     else:
         temps = int(tournoi.get("temps"))
+
         nb_table = int(affiche_nb_equip("table"))
-        nb_matchs = temps//5 * 2
+        nb_matchs = temps // 5 * nb_table
         nb_matchs_finales = recup_nb_match(nb_matchs)[1]
 
         # Récupération de la liste des joueurs qui sont déjà inscrit au tournoi
@@ -279,9 +280,9 @@ def creation_match_tournois(id_tournoi: str):
         return "Le nombre de participant doit être pair pour pouvoir créer les matchs", 439
     elif nb_table < 1:
         return "Le nombre de table est insufisant pour pouvoir créer les matchs", 459
-    elif nb_balle < 2:
+    elif nb_balle < nb_table:
         return "Le nombre de balle est insufisant pour pouvoir créer les matchs", 469
-    elif nb_raquette < 4:
+    elif nb_raquette < nb_table * 2:
         return "Le nombre de raquette est insufisant pour pouvoir créer les matchs", 489
     else:
 
@@ -297,7 +298,8 @@ def creation_match_tournois(id_tournoi: str):
         qui vont êtres utilisées pour le tournoi
         """
         result_balle, result_table, result_raquette = [collection_equipement.find(cond).limit(limite) for cond, limite
-                                                       in zip([cond_balle, cond_table, cond_raquette], [2, 2, 4])]
+                                                       in zip([cond_balle, cond_table, cond_raquette],
+                                                              [nb_table, nb_table, nb_table * 2])]
 
         # Création d'une liste pour associer les tables aux matchs
         liste_tables = list(result_table)
@@ -342,7 +344,7 @@ def creation_match_tournois(id_tournoi: str):
             id_table += 1
 
             # Mise à zéro de l'id pour ne pas sortir du tableau et associé une même table pour plusieurs matchs
-            if id_table == 2:
+            if id_table == nb_table:
                 id_table = 0
 
         return "Les matchs ont été crée", 200
@@ -355,7 +357,8 @@ def recup_nb_max_inscription(id_tournoi: str):
     tournoi = collection.find_one({"_id": id_tournoi})
 
     temps = int(tournoi.get("temps"))
-    nb_matchs = temps // 5 * 2
+    nb_table = int(affiche_nb_equip("table"))
+    nb_matchs = temps // 5 * nb_table
     nb_matchs_finales = recup_nb_match(nb_matchs)[1]
 
     return jsonify(nb_matchs_finales * 2), 201
