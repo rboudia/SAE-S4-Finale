@@ -12,8 +12,4 @@ export class MatchService {
   rechercherMatchsParNomTournoi(nomTournoi: string): Observable<any> {
     return this.http.get<any>(`/api/matchs/tournoi/${nomTournoi}`);
   }
-
-  afficheMatchsAvecId(idTournoi: string): Observable<any> {
-    return this.http.get<any>(`/api/matchs/tournoi_id/${idTournoi}`);
-  }
 }

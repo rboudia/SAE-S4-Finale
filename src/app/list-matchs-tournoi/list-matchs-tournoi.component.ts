@@ -5,7 +5,6 @@ import {HttpClientModule} from "@angular/common/http";
 import {MatchService} from "../services/match.service";
 import {TournoiService} from '../services/tournoi.service';
 import {ActivatedRoute} from "@angular/router";
-import {OnInit} from "@angular/core";
 
 @Component({
   selector: 'app-list-matchs-tournoi',

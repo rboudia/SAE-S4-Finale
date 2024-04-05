@@ -8,5 +8,5 @@ import {RouterLink, RouterOutlet} from '@angular/router';
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  title = 'SAR_S4';
+  title = 'SAE_S4';
 }

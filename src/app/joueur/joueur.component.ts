@@ -14,7 +14,6 @@ import { Joueur } from './joueur.module';
   templateUrl: './joueur.component.html',
 })
 export class JoueurComponent {
-  title = 'Projet';
   showItems2 = false;
   showItems3 = false;
   nomJoueur = '';

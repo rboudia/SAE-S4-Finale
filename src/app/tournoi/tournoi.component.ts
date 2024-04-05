@@ -41,14 +41,6 @@ export class TournoiComponent {
     );
   }
 
-  afficherDetailTournoi(id: string) {
-    this.router.navigate(['/modifier-tournoi', id]);
-  }
-
-  afficherTournois() {
-    this.showItems = !this.showItems;
-  }
-
   envoieForm() {
     const tournoiData = {
       nom: this.nom,
