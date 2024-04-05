@@ -22,6 +22,7 @@ export class ModifTournoiComponent implements OnInit {
   nouveauChamp2: string = '';
   nouveauChamp3: string = '';
   retourMessage: string = '';
+  nbMaxInscrits: string = '';
 
   constructor(private router: Router, private route: ActivatedRoute, private tournoiService: TournoiService, private joueurService: JoueurService) {
   }
@@ -35,6 +36,11 @@ export class ModifTournoiComponent implements OnInit {
         },
         error => {
           console.error('Erreur lors de la récupération du tournoi:', error);
+        }
+      );
+      this.tournoiService.nbMaxInscrits(id).subscribe(
+        (data: any ) => {
+          this.nbMaxInscrits = data
         }
       );
     });
@@ -104,6 +110,7 @@ export class ModifTournoiComponent implements OnInit {
           this.retourMessage = "Erreur interne !";
         } else if (error.status === 200) {
           this.retourMessage = "Matchs crées !";
+          this.nbMaxInscrits = ""
         }
       }
     );
@@ -119,5 +126,7 @@ export class ModifTournoiComponent implements OnInit {
       }
     );
   }
+
+
 }
 

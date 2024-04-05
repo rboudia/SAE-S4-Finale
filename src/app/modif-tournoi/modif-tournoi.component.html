@@ -9,7 +9,7 @@
           <p>Date de début: {{ tournoi.date.debut }}</p>
           <p>Date de fin: {{ tournoi.date.fin }}</p>
           <p>Joueurs inscrits : </p>
-          <p *ngFor="let joueur of tournoi.Joueurs">Id : {{ joueur._id }}, {{ joueur.nom }} {{joueur.prenom}} </p>
+          <p *ngFor="let joueur of tournoi.Joueurs">Id : {{ joueur._id }}, {{ joueur.nom }} {{ joueur.prenom }} </p>
           <p>Catégorie d'âge: {{ tournoi.Categorie.age }}</p>
           <p>Niveau: {{ tournoi.Categorie.niveau }}</p>
           <p>Format: {{ tournoi.format }}</p>
@@ -40,12 +40,19 @@
         <ul *ngIf="joueurs" class="list-unstyled">
           <li *ngFor="let joueur of joueurs" class="joueur-item">
             {{ joueur.nom }} | {{ joueur.prenom }} | {{ joueur.Categorie.niveau }} | {{ joueur.Categorie.age }} ans
-              <button (click)="inscrireJoueur(joueur._id)">Inscrire</button>
+            <button (click)="inscrireJoueur(joueur._id)">Inscrire</button>
           </li>
         </ul>
       </div>
     </div>
     <div class="text-center">
+      <br>
+      <div class="text-center">
+        <div *ngIf="nbMaxInscrits">
+          <p>Le nombre maximal de joueurs pouvant être inscrits à ce tournoi est de : {{ nbMaxInscrits }}</p>
+        </div>
+
+      </div>
       <br>
       <a href="/tournois">
         <button (click)="confirmerSuppression()">Supprimer le tournoi</button>
@@ -53,7 +60,7 @@
     </div>
     <br>
     <div class="text-center">
-        <button (click)="creerMatch()">Créer match</button>
+      <button (click)="creerMatch()">Créer match</button>
       <div *ngIf="retourMessage" class="error-message">
         {{ retourMessage }}
       </div>

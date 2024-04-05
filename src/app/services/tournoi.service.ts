@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,7 @@ export class TournoiService {
   getTournois() {
     return this.http.get("/api/tournois")
   }
+
   insererTournoi(tournoi: any): Observable<any> {
     return this.http.post<any>("/api/tournois", tournoi);
   }
@@ -20,9 +21,11 @@ export class TournoiService {
   getTournoiById(id: string) {
     return this.http.get(`/api/tournois/${id}`);
   }
+
   inscrireJoueurAuTournoi(idTournoi: string, idJoueur: string): Observable<any> {
     return this.http.patch(`/api/tournois/ajout_joueurs/${idTournoi}/${idJoueur}`, {});
   }
+
   supprimerTournoi(idTournoi: string): Observable<any> {
     return this.http.delete(`/api/tournois/${idTournoi}`);
   }
@@ -38,5 +41,9 @@ export class TournoiService {
 
   modifierNomTournoi(idTournoi: string, champ: string, ancienNom: string, nouveauNom: string): Observable<any> {
     return this.http.patch(`/api/tournois/modif/${idTournoi}/${champ}/${ancienNom}/${nouveauNom}`, {});
+  }
+
+  nbMaxInscrits(idTournoi: string) {
+    return this.http.get(`api/tournois/nb_max_inscription/${idTournoi}`);
   }
 }
